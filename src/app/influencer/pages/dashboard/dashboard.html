@@ -1,0 +1,85 @@
+<div class="container mt-4">
+
+  <h2>
+    Influencer Dashboard
+  </h2>
+
+  <div class="row mb-4">
+
+    <div class="col-md-6">
+
+      <div class="card">
+
+        <div class="card-body">
+
+          <h5>Pending Requests</h5>
+
+          <h2>
+            {{ pendingCount }}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <div class="card">
+
+        <div class="card-body">
+
+          <h5>Accepted</h5>
+
+          <h2>
+            {{ acceptedCount }}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <table class="table">
+
+    <thead>
+
+    <tr>
+
+      <th>Brand</th>
+
+      <th>Message</th>
+
+      <th>Status</th>
+
+    </tr>
+
+    </thead>
+
+    <tbody>
+
+    <tr *ngFor="let request of requests">
+
+      <td>
+        {{ request.brandName }}
+      </td>
+
+      <td>
+        {{ request.message }}
+      </td>
+
+      <td>
+        {{ request.status }}
+      </td>
+
+    </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

@@ -1,0 +1,148 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">
+    Brand Dashboard
+  </h2>
+
+  <div class="row mb-4">
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-body">
+
+          <h5>Total Collaborations</h5>
+
+          <h2>
+            {{ collaborations.length }}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-body">
+
+          <h5>Pending</h5>
+
+          <h2>
+            {{ pendingCount }}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+      <div class="card">
+
+        <div class="card-body">
+
+          <h5>Completed</h5>
+
+          <h2>
+            {{ completedCount }}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="card-header">
+
+      Collaboration Requests
+
+    </div>
+
+    <div class="card-body">
+
+      <table class="table">
+
+        <thead>
+
+        <tr>
+
+          <th>ID</th>
+
+          <th>Influencer</th>
+
+          <th>Message</th>
+
+          <th>Status</th>
+
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr
+          *ngFor="let c of collaborations">
+
+          <td>
+            {{ c.collaborationId }}
+          </td>
+
+          <td>
+            {{ c.influencerUsername }}
+          </td>
+
+          <td>
+            {{ c.message }}
+          </td>
+
+          <td>
+
+            <span
+              class="badge bg-warning"
+              *ngIf="c.status === 'PENDING'">
+
+              PENDING
+
+            </span>
+
+            <span
+              class="badge bg-success"
+              *ngIf="c.status === 'ACCEPTED'">
+
+              ACCEPTED
+
+            </span>
+
+            <span
+              class="badge bg-primary"
+              *ngIf="c.status === 'COMPLETED'">
+
+              COMPLETED
+
+            </span>
+
+          </td>
+
+        </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
