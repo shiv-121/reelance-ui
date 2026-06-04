@@ -1,14 +1,15 @@
 <div class="container mt-4">
 
-  <h2>
-    Influencer Dashboard
-  </h2>
+  <div>
+    <h2>Influencer Dashboard</h2>
+    <p class="text-muted mb-4">View collaboration requests from brands</p>
+  </div>
 
   <div class="row mb-4">
 
     <div class="col-md-6">
 
-      <div class="card">
+      <div class="card stat-card">
 
         <div class="card-body">
 
@@ -26,7 +27,7 @@
 
     <div class="col-md-6">
 
-      <div class="card">
+      <div class="card stat-card">
 
         <div class="card-body">
 
@@ -44,42 +45,47 @@
 
   </div>
 
-  <table class="table">
+  <div class="card">
+    <div class="card-header">Brand Requests</div>
+    <div class="card-body">
+      <table class="table">
 
-    <thead>
+        <thead>
 
-    <tr>
+        <tr>
 
-      <th>Brand</th>
+          <th>Brand</th>
 
-      <th>Message</th>
+          <th>Message</th>
 
-      <th>Status</th>
+          <th>Status</th>
 
-    </tr>
+        </tr>
 
-    </thead>
+        </thead>
 
-    <tbody>
+        <tbody>
 
-    <tr *ngFor="let request of requests">
+        <tr *ngFor="let request of requests">
 
-      <td>
-        {{ request.brandName }}
-      </td>
+          <td>
+            {{ request.brandName }}
+          </td>
 
-      <td>
-        {{ request.message }}
-      </td>
+          <td>
+            {{ request.message }}
+          </td>
 
-      <td>
-        {{ request.status }}
-      </td>
+          <td>
+            {{ request.status }}
+          </td>
 
-    </tr>
+        </tr>
 
-    </tbody>
+        </tbody>
 
-  </table>
+      </table>
+    </div>
+  </div>
 
 </div>

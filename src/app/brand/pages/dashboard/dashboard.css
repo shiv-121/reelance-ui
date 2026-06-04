@@ -1,7 +1,17 @@
 .card {
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
 }
 
-h2 {
+.stat-card {
+  transition: 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+.table {
   margin-bottom: 0;
 }
