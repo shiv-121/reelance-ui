@@ -4,6 +4,17 @@
 
     <div class="navbar-nav ms-auto">
       <a class="nav-link" [routerLink]="dashboardRoute">Dashboard</a>
+
+      @if (isBrand) {
+        <a class="nav-link" routerLink="/brand/campaigns">Campaigns</a>
+      }
+
+      @if (isInfluencer) {
+        <a class="nav-link" routerLink="/influencer/campaigns">Browse Campaigns</a>
+        <a class="nav-link" routerLink="/influencer/applications">My Applications</a>
+        <a class="nav-link" routerLink="/influencer/my-campaigns">My Campaigns</a>
+      }
+
       <a class="nav-link" routerLink="/profile">Profile</a>
       <button class="btn btn-outline-light ms-2" (click)="logout()">
         <i class="bi bi-box-arrow-right"></i> Logout

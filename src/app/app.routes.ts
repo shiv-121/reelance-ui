@@ -24,6 +24,12 @@ export const routes: Routes = [
 
   {
     path: 'brand',
+    redirectTo: 'brand/dashboard',
+    pathMatch: 'full'
+  },
+
+  {
+    path: 'brand/dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./brand/pages/dashboard/dashboard')
@@ -31,11 +37,49 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/campaigns',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./brand/pages/campaigns/campaigns')
+        .then(m => m.Campaigns)
+  },
+
+  {
     path: 'influencer',
+    redirectTo: 'influencer/dashboard',
+    pathMatch: 'full'
+  },
+
+  {
+    path: 'influencer/dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./influencer/pages/dashboard/dashboard')
         .then(m => m.Dashboard)
+  },
+
+  {
+    path: 'influencer/campaigns',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./influencer/pages/campaigns/campaigns')
+        .then(m => m.Campaigns)
+  },
+
+  {
+    path: 'influencer/applications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./influencer/pages/applications/applications')
+        .then(m => m.Applications)
+  },
+
+  {
+    path: 'influencer/my-campaigns',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./influencer/pages/my-campaigns/my-campaigns')
+        .then(m => m.MyCampaigns)
   },
 
   {

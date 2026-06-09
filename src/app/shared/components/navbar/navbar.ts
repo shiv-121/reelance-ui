@@ -17,7 +17,15 @@ export class Navbar {
   protected role = this.tokenService.getRole();
 
   protected get dashboardRoute(): string {
-    return this.role === 'BRAND' ? '/brand' : '/influencer';
+    return this.role === 'BRAND' ? '/brand/dashboard' : '/influencer/dashboard';
+  }
+
+  protected get isBrand(): boolean {
+    return this.role === 'BRAND';
+  }
+
+  protected get isInfluencer(): boolean {
+    return this.role === 'INFLUENCER';
   }
 
   protected logout(): void {
