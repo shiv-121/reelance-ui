@@ -5,11 +5,16 @@ import {
 export const authInterceptor: HttpInterceptorFn =
   (req, next) => {
 
-    const token =
-      localStorage.getItem('token');
+    if (
+      req.url.includes('/api/auth/login') ||
+      req.url.includes('/api/auth/register')
+    ) {
+      return next(req);
+    }
+
+    const token = localStorage.getItem('token');
 
     if (token) {
-
       req = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
