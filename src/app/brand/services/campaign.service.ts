@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Campaign } from '../models/campaign';
 import { CreateCampaignRequest } from '../models/create-campaign-request';
+import { Application } from '../models/application';
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +30,17 @@ export class CampaignService {
   completeCampaign(id: number): Observable<Campaign> {
     return this.http.patch<Campaign>(`${this.API}/${id}/complete`, {});
   }
+
+  getCampaignApplications(campaignId: number): Observable<Application[]> {
+    return this.http.get<Application[]>(`http://localhost:8080/api/campaign-applications/campaign/${campaignId}`);
+  }
+
+  acceptApplication(applicationId: number): Observable<any> {
+    return this.http.patch(`http://localhost:8080/api/campaign-applications/${applicationId}?status=ACCEPTED`, {});
+  }
+
+  rejectApplication(applicationId: number): Observable<any> {
+    return this.http.patch(`http://localhost:8080/api/campaign-applications/${applicationId}?status=REJECTED`, {});
+  }
 }
+

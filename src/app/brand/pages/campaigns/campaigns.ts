@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import { Campaign } from '../../models/campaign';
 import { CreateCampaignRequest } from '../../models/create-campaign-request';
@@ -9,7 +10,7 @@ import { CampaignService } from '../../services/campaign.service';
 @Component({
   selector: 'app-campaigns',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './campaigns.html',
   styleUrl: './campaigns.css',
 })

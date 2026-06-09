@@ -1,0 +1,85 @@
+<div class="container mt-5">
+
+  <button class="btn btn-secondary mb-4" (click)="goBack()">
+    ← Back
+  </button>
+
+  <h2 class="mb-4">Campaign Applications</h2>
+
+  @if (successMessage) {
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ successMessage }}
+    </div>
+  }
+
+  @if (loading) {
+    <div class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  @if (!loading && applications.length === 0) {
+    <div class="alert alert-info">
+      No applications found.
+    </div>
+  }
+
+  @for (app of applications; track app.applicationId) {
+    <div class="application-card">
+
+      <div class="card-header">
+        <h4>{{ app.influencerUsername }}</h4>
+        <span 
+          class="badge"
+          [ngClass]="{
+            'bg-warning': app.status === 'PENDING',
+            'bg-success': app.status === 'ACCEPTED',
+            'bg-danger': app.status === 'REJECTED'
+          }">
+          {{ app.status }}
+        </span>
+      </div>
+
+      <div class="card-body">
+        <p class="mb-2">
+          <strong>Expected Price:</strong> ₹{{ app.expectedPrice | number }}
+        </p>
+
+        <p class="mb-2">
+          <strong>Proposal:</strong>
+        </p>
+        <p class="proposal-text">
+          {{ app.proposal }}
+        </p>
+
+        @if (app.portfolioLink) {
+          <p class="mb-3">
+            <strong>Portfolio:</strong> 
+            <a [href]="app.portfolioLink" target="_blank" rel="noopener noreferrer">
+              View Portfolio
+            </a>
+          </p>
+        }
+
+        @if (app.status === 'PENDING') {
+          <div class="actions">
+            <button 
+              class="btn btn-success btn-sm"
+              (click)="acceptApplication(app.applicationId)">
+              Accept
+            </button>
+            <button 
+              class="btn btn-danger btn-sm"
+              (click)="rejectApplication(app.applicationId)">
+              Reject
+            </button>
+          </div>
+        }
+      </div>
+
+    </div>
+  }
+
+</div>

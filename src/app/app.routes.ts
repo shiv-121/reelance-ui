@@ -45,6 +45,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/campaigns/:id/applications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./brand/pages/campaign-applications/campaign-applications')
+        .then(m => m.CampaignApplications)
+  },
+
+  {
     path: 'influencer',
     redirectTo: 'influencer/dashboard',
     pathMatch: 'full'

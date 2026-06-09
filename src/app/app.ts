@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 import { Navbar } from './shared/components/navbar/navbar';
 
@@ -11,5 +11,15 @@ import { Navbar } from './shared/components/navbar/navbar';
   styleUrl: './app.css'
 })
 export class App {
+  private readonly router = inject(Router);
   protected readonly title = signal('reelance-ui');
+
+  protected get showNavbar(): boolean {
+    const hiddenRoutes = [
+      '/login',
+      '/register'
+    ];
+
+    return !hiddenRoutes.includes(this.router.url);
+  }
 }

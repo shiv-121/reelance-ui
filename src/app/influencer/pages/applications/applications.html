@@ -1,4 +1,71 @@
 <div class="container mt-5">
-  <h1>My Applications</h1>
-  <p>Your campaign applications</p>
+  <h1 class="mb-4">My Applications</h1>
+
+  @if (error) {
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="btn-close" (click)="error = null"></button>
+    </div>
+  }
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  <div class="row">
+    @for (application of applications; track application.applicationId) {
+      <div class="col-md-6 mb-4">
+        <div class="card application-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h5 class="card-title mb-1">{{ application.campaignTitle }}</h5>
+                <p class="text-muted small mb-0">Campaign ID: {{ application.campaignId }}</p>
+              </div>
+              <span 
+                class="badge"
+                [ngClass]="getStatusBadgeClass(application.status)">
+                <i [ngClass]="'bi ' + getStatusIcon(application.status)" class="me-1"></i>
+                {{ application.status }}
+              </span>
+            </div>
+
+            <div class="application-info mb-3">
+              <div class="info-row">
+                <strong>Expected Price:</strong>
+                <span class="badge bg-info">₹{{ application.expectedPrice | number }}</span>
+              </div>
+              <div class="info-row">
+                <strong>Status:</strong>
+                <span [ngClass]="'status-text status-' + application.status.toLowerCase()">
+                  {{ application.status }}
+                </span>
+              </div>
+            </div>
+
+            <div class="proposal-section">
+              <strong>Your Proposal:</strong>
+              <p class="text-muted small">{{ application.proposal }}</p>
+            </div>
+
+            <div class="application-meta text-muted small">
+              <p class="mb-0">Applied as: <strong>{{ application.influencerUsername }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      @if (!loading) {
+        <div class="col-12">
+          <div class="alert alert-info" role="alert">
+            No applications yet. <a routerLink="/influencer/campaigns">Browse campaigns</a> and apply now!
+          </div>
+        </div>
+      }
+    }
+  </div>
 </div>

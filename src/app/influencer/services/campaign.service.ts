@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { Campaign } from '../models/campaign';
 import { CampaignApplicationRequest } from '../models/campaign-application-request';
+import { Application } from '../models/application';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,9 @@ export class CampaignService {
 
   applyToCampaign(request: CampaignApplicationRequest): Observable<any> {
     return this.http.post(this.APPLICATIONS_API, request);
+  }
+
+  getMyApplications(): Observable<Application[]> {
+    return this.http.get<Application[]>(`${this.APPLICATIONS_API}/my-applications`);
   }
 }

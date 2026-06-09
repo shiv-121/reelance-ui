@@ -14,7 +14,9 @@ export class Navbar {
   private readonly tokenService = inject(TokenService);
   private readonly router = inject(Router);
 
-  protected role = this.tokenService.getRole();
+  protected get role(): string | null {
+    return this.tokenService.getRole();
+  }
 
   protected get dashboardRoute(): string {
     return this.role === 'BRAND' ? '/brand/dashboard' : '/influencer/dashboard';
