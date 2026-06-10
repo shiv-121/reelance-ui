@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 import { CollaborationService }
 from '../../../core/services/collaboration.service';
@@ -10,7 +11,10 @@ from '../../../core/models/collaboration';
 @Component({
   selector: 'app-brand-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterLink
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })

@@ -1,16 +1,30 @@
 <div class="container mt-4">
 
-  <div class="d-flex justify-content-between mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
     <div>
+
       <h2>Brand Dashboard</h2>
-      <p class="text-muted">Manage your influencer collaborations</p>
+
+      <p class="text-muted">
+        Manage your influencer collaborations
+      </p>
+
     </div>
-    <button class="btn btn-primary">New Campaign</button>
+
+    <a
+      class="btn btn-primary"
+      routerLink="/brand/campaigns">
+
+      New Campaign
+
+    </a>
+
   </div>
 
   <div class="row mb-4">
 
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
 
       <div class="card stat-card">
 
@@ -28,7 +42,7 @@
 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
 
       <div class="card stat-card">
 
@@ -46,7 +60,7 @@
 
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-4 mb-3">
 
       <div class="card stat-card">
 
@@ -76,74 +90,90 @@
 
     <div class="card-body">
 
-      <table class="table">
+      @if (collaborations.length === 0) {
 
-        <thead>
+        <div class="alert alert-info">
 
-        <tr>
+          No collaborations found.
 
-          <th>ID</th>
+        </div>
 
-          <th>Influencer</th>
+      } @else {
 
-          <th>Message</th>
+        <div class="table-responsive">
 
-          <th>Status</th>
+          <table class="table table-hover">
 
-        </tr>
+            <thead>
 
-        </thead>
+              <tr>
 
-        <tbody>
+                <th>ID</th>
 
-        <tr
-          *ngFor="let c of collaborations">
+                <th>Influencer</th>
 
-          <td>
-            {{ c.collaborationId }}
-          </td>
+                <th>Message</th>
 
-          <td>
-            {{ c.influencerUsername }}
-          </td>
+                <th>Status</th>
 
-          <td>
-            {{ c.message }}
-          </td>
+              </tr>
 
-          <td>
+            </thead>
 
-            <span
-              class="badge bg-warning"
-              *ngIf="c.status === 'PENDING'">
+            <tbody>
 
-              PENDING
+              <tr
+                *ngFor="let c of collaborations">
 
-            </span>
+                <td>
+                  {{ c.collaborationId }}
+                </td>
 
-            <span
-              class="badge bg-success"
-              *ngIf="c.status === 'ACCEPTED'">
+                <td>
+                  {{ c.influencerUsername }}
+                </td>
 
-              ACCEPTED
+                <td>
+                  {{ c.message }}
+                </td>
 
-            </span>
+                <td>
 
-            <span
-              class="badge bg-primary"
-              *ngIf="c.status === 'COMPLETED'">
+                  <span
+                    class="badge bg-warning"
+                    *ngIf="c.status === 'PENDING'">
 
-              COMPLETED
+                    PENDING
 
-            </span>
+                  </span>
 
-          </td>
+                  <span
+                    class="badge bg-success"
+                    *ngIf="c.status === 'ACCEPTED'">
 
-        </tr>
+                    ACCEPTED
 
-        </tbody>
+                  </span>
 
-      </table>
+                  <span
+                    class="badge bg-primary"
+                    *ngIf="c.status === 'COMPLETED'">
+
+                    COMPLETED
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
 
     </div>
 
