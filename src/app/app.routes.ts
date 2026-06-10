@@ -53,6 +53,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/campaigns/:id/participants',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./brand/pages/campaign-participants/campaign-participants')
+        .then(m => m.CampaignParticipants)
+  },
+
+  {
     path: 'influencer',
     redirectTo: 'influencer/dashboard',
     pathMatch: 'full'
@@ -96,6 +104,17 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/profile/profile')
         .then(m => m.Profile)
+  },
+
+  {
+    path: 'profile/setup',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './influencer/pages/profile-setup/profile-setup'
+      ).then(
+        m => m.ProfileSetup
+      )
   },
 
   {

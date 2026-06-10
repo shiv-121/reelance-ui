@@ -1,24 +1,67 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand fw-bold" routerLink="/">Reelance</a>
+<nav class="navbar">
 
-    <div class="navbar-nav ms-auto">
-      <a class="nav-link" [routerLink]="dashboardRoute">Dashboard</a>
+  <div
+    class="logo"
+    [routerLink]="dashboardRoute">
 
-      @if (isBrand) {
-        <a class="nav-link" routerLink="/brand/campaigns">Campaigns</a>
-      }
+    Reelance
 
-      @if (isInfluencer) {
-        <a class="nav-link" routerLink="/influencer/campaigns">Browse Campaigns</a>
-        <a class="nav-link" routerLink="/influencer/applications">My Applications</a>
-        <a class="nav-link" routerLink="/influencer/my-campaigns">My Campaigns</a>
-      }
-
-      <a class="nav-link" routerLink="/profile">Profile</a>
-      <button class="btn btn-outline-light ms-2" (click)="logout()">
-        <i class="bi bi-box-arrow-right"></i> Logout
-      </button>
-    </div>
   </div>
+
+  <div class="nav-links">
+
+    @if (role === 'BRAND') {
+
+      <a routerLink="/brand">
+        Dashboard
+      </a>
+
+      <a routerLink="/brand/campaigns">
+        Campaigns
+      </a>
+
+      <a routerLink="/brand/influencers">
+        Influencers
+      </a>
+
+    }
+
+    @if (role === 'INFLUENCER') {
+
+      <a routerLink="/influencer">
+        Dashboard
+      </a>
+
+      <a routerLink="/influencer/campaigns">
+        Browse Campaigns
+      </a>
+
+      <a routerLink="/influencer/applications">
+        My Applications
+      </a>
+
+    }
+
+  </div>
+
+  <div class="actions">
+
+    <button
+      class="profile-btn"
+      routerLink="/profile">
+
+      Profile
+
+    </button>
+
+    <button
+      class="logout-btn"
+      (click)="logout()">
+
+      Logout
+
+    </button>
+
+  </div>
+
 </nav>
