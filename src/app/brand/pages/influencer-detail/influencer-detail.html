@@ -1,0 +1,107 @@
+@if (loading) {
+
+  <p>
+    Loading...
+  </p>
+
+}
+
+@if (!loading && influencer) {
+
+  <div class="page">
+
+    <a
+      routerLink="/brand/influencers"
+      class="back-link">
+
+      ← Back To Influencers
+
+    </a>
+
+    <div class="profile-card">
+
+      <div class="avatar">
+
+        {{
+          influencer.username
+            .charAt(0)
+            .toUpperCase()
+        }}
+
+      </div>
+
+      <h1>
+
+        {{ influencer.username }}
+
+      </h1>
+
+      <p class="handle">
+
+        {{ influencer.instagramHandle }}
+
+      </p>
+
+      <div class="stats">
+
+        <div class="stat">
+
+          <h3>
+
+            Followers
+
+          </h3>
+
+          <p>
+
+            {{
+              influencer.followers
+            }}
+
+          </p>
+
+        </div>
+
+        <div class="stat">
+
+          <h3>
+
+            Niche
+
+          </h3>
+
+          <p>
+
+            {{
+              influencer.niche
+            }}
+
+          </p>
+
+        </div>
+
+        <div class="stat">
+
+          <h3>
+
+            Price
+
+          </h3>
+
+          <p>
+
+            ₹{{
+              influencer.pricePerPost
+            }}
+
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

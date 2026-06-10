@@ -31,4 +31,14 @@ export class InfluencerProfileService {
       `${this.api}/profile`
     );
   }
+
+  updateProfile(
+    request: InfluencerProfile
+  ): Observable<any> {
+
+    return this.http.put(
+      `${this.api}/profile`,
+      request
+    );
+  }
 }
