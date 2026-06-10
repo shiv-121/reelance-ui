@@ -1,0 +1,141 @@
+<div class="page">
+
+  <h1>
+    Discover Influencers
+  </h1>
+
+  <div class="filters">
+
+    <input
+      type="number"
+      placeholder="Min Price"
+      [(ngModel)]="minPrice">
+
+    <input
+      type="number"
+      placeholder="Max Price"
+      [(ngModel)]="maxPrice">
+
+    <select
+      [(ngModel)]="sort">
+
+      <option
+        value="pricePerPost,asc">
+
+        Price Low → High
+
+      </option>
+
+      <option
+        value="pricePerPost,desc">
+
+        Price High → Low
+
+      </option>
+
+    </select>
+
+    <button
+      (click)="loadInfluencers()">
+
+      Apply Filters
+
+    </button>
+
+  </div>
+
+
+  @if (influencers.length === 0) {
+
+    <div class="empty-state">
+
+      <h2>
+        No Influencers Found
+      </h2>
+
+      <p>
+        Try adjusting your filters.
+      </p>
+
+    </div>
+
+  } @else {
+
+    <div class="grid">
+
+      @for (
+        influencer of influencers;
+        track influencer.id
+      ) {
+
+        <div class="card">
+
+          <div class="avatar">
+
+            {{
+              influencer.username
+                .charAt(0)
+                .toUpperCase()
+            }}
+
+          </div>
+
+          <h3>
+
+            {{ influencer.username }}
+
+          </h3>
+
+          <p class="handle">
+
+            {{ influencer.instagramHandle }}
+
+          </p>
+
+          <div class="badge-row">
+
+            <span class="badge niche">
+
+              {{ influencer.niche }}
+
+            </span>
+
+            <span class="badge followers">
+
+              {{ influencer.followers }}
+              followers
+
+            </span>
+
+          </div>
+
+          <div class="price">
+
+            ₹{{ influencer.pricePerPost }}
+
+            <span>
+              / post
+            </span>
+
+          </div>
+
+          <a
+            class="profile-link"
+            [routerLink]="[
+              '/brand/influencers',
+              influencer.id
+            ]">
+
+            View Profile
+
+          </a>
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>

@@ -118,6 +118,17 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/influencers',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './brand/pages/influencers/influencers'
+      ).then(
+        m => m.Influencers
+      )
+  },
+
+  {
     path: '**',
     redirectTo: 'login'
   }
