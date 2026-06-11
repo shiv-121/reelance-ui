@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
+
+    {
+  path: 'profile/edit',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./pages/profile-edit/profile-edit')
+      .then(m => m.ProfileEdit)
+},
+
   {
     path: '',
     redirectTo: 'login',
