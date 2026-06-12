@@ -1,44 +1,116 @@
 .page {
 
-  padding: 24px;
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 32px;
 }
 
+.page h1 {
+
+  font-size: 48px;
+
+  font-weight: 700;
+
+  margin-bottom: 24px;
+
+  color: #111827;
+}
 .filters {
 
   display: flex;
 
-  gap: 12px;
+  gap: 16px;
 
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 
   flex-wrap: wrap;
+
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 4px 16px rgba(
+      0,
+      0,
+      0,
+      0.06
+    );
+
+  align-items: center;
 }
 
 .filters input,
 .filters select {
 
-  padding: 10px;
+  flex: 1;
 
-  border: 1px solid #d1d5db;
+  min-width: 180px;
 
-  border-radius: 8px;
+  height: 48px;
+
+  padding: 0 14px;
+
+  border: 1px solid #E5E7EB;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  background: #FAFAFA;
+
+  transition: all 0.2s ease;
+}
+
+.filters input:focus,
+.filters select:focus {
+
+  outline: none;
+
+  border-color: #2563EB;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 3px rgba(
+      37,
+      99,
+      235,
+      0.1
+    );
 }
 
 .filters button {
 
-  background: #2563eb;
+  height: 48px;
 
-  color: white;
+  padding: 0 24px;
 
   border: none;
 
-  padding: 10px 18px;
+  border-radius: 10px;
 
-  border-radius: 8px;
+  background: #2563EB;
+
+  color: white;
+
+  font-weight: 600;
 
   cursor: pointer;
+
+  transition: all 0.2s ease;
 }
 
+.filters button:hover {
+
+  background: #1D4ED8;
+
+  transform: translateY(-1px);
+}
 .grid {
 
   display: grid;
@@ -256,4 +328,43 @@
 .empty-state p {
 
   color: #6b7280;
+}
+
+.page-tag {
+
+  display: inline-block;
+
+  background: #DBEAFE;
+
+  color: #1D4ED8;
+
+  padding: 6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  margin-bottom: 12px;
+}
+
+.page-header h1 {
+
+  font-size: 48px;
+
+  font-weight: 800;
+
+  color: #111827;
+
+  margin-bottom: 8px;
+
+  letter-spacing: -1px;
+}
+
+.page-header p {
+
+  color: #64748B;
+
+  font-size: 18px;
 }
