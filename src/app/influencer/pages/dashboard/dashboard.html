@@ -1,91 +1,196 @@
-<div class="container mt-4">
+<div class="dashboard-shell">
+  <section class="hero-card">
+    <div class="hero-copy">
+      <div class="eyebrow">Creator Studio</div>
+      <h1>Good Morning Shivam</h1>
+      <p>Here’s your next best move for today’s campaign opportunities.</p>
+    </div>
 
-  <div>
-    <h2>Influencer Dashboard</h2>
-    <p class="text-muted mb-4">View collaboration requests from brands</p>
-  </div>
+    <div class="hero-actions">
+      <button class="btn btn-primary" type="button">Complete Profile</button>
+    </div>
+  </section>
 
-  <div class="row mb-4">
+  <section class="stats-grid">
+    <article class="stat-card">
+      <span class="stat-label">Applications</span>
+      <strong>{{ requests.length }}</strong>
+      <p>Active opportunities</p>
+    </article>
 
-    <div class="col-md-6">
+    <article class="stat-card">
+      <span class="stat-label">Under Review</span>
+      <strong>{{ pendingCount }}</strong>
+      <p>Awaiting a decision</p>
+    </article>
 
-      <div class="card stat-card">
+    <article class="stat-card">
+      <span class="stat-label">Accepted</span>
+      <strong>{{ acceptedCount }}</strong>
+      <p>Winning collaborations</p>
+    </article>
 
-        <div class="card-body">
+    <article class="stat-card">
+      <span class="stat-label">Total Earnings</span>
+      <strong>₹12.4K</strong>
+      <p>This month</p>
+    </article>
 
-          <h5>Pending Requests</h5>
+    <article class="stat-card">
+      <span class="stat-label">Followers</span>
+      <strong>24.8K</strong>
+      <p>Growing steadily</p>
+    </article>
+  </section>
 
-          <h2>
-            {{ pendingCount }}
-          </h2>
-
+  <section class="dashboard-body">
+    <div class="main-column">
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Application Status</h2>
+            <p>Track where your opportunities stand</p>
+          </div>
         </div>
 
+        <div class="status-tabs">
+          <button class="tab active" type="button">Applied <span>{{ requests.length }}</span></button>
+          <button class="tab" type="button">Under Review <span>{{ pendingCount }}</span></button>
+          <button class="tab" type="button">Accepted <span>{{ acceptedCount }}</span></button>
+          <button class="tab" type="button">Rejected <span>0</span></button>
+        </div>
       </div>
 
-    </div>
-
-    <div class="col-md-6">
-
-      <div class="card stat-card">
-
-        <div class="card-body">
-
-          <h5>Accepted</h5>
-
-          <h2>
-            {{ acceptedCount }}
-          </h2>
-
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Recommended Campaigns</h2>
+            <p>Fresh matches for your profile</p>
+          </div>
         </div>
 
+        <div class="campaign-grid">
+          <article class="campaign-card">
+            <div class="campaign-top">
+              <div class="brand-mark">N</div>
+              <div>
+                <h3>Northstar Studio</h3>
+                <p>Beauty Reel Campaign</p>
+              </div>
+            </div>
+            <div class="campaign-body">
+              <p class="campaign-title">Spring Glow Product Launch</p>
+              <div class="meta-row">
+                <span>Budget ₹18K</span>
+                <span>Deadline 2 days</span>
+              </div>
+              <div class="meta-row">
+                <span>Niche Beauty</span>
+                <span>Followers 15K+</span>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-full" type="button">Apply</button>
+          </article>
+
+          <article class="campaign-card">
+            <div class="campaign-top">
+              <div class="brand-mark">A</div>
+              <div>
+                <h3>Aurora Labs</h3>
+                <p>Wellness Creator Brief</p>
+              </div>
+            </div>
+            <div class="campaign-body">
+              <p class="campaign-title">Morning Ritual Series</p>
+              <div class="meta-row">
+                <span>Budget ₹12K</span>
+                <span>Deadline 5 days</span>
+              </div>
+              <div class="meta-row">
+                <span>Niche Lifestyle</span>
+                <span>Followers 10K+</span>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-full" type="button">Apply</button>
+          </article>
+        </div>
       </div>
 
+      <div class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Recent Activity</h2>
+            <p>Your latest collaboration moments</p>
+          </div>
+        </div>
+
+        <div class="timeline" *ngIf="requests.length > 0; else emptyActivity">
+          <div class="timeline-item" *ngFor="let request of requests">
+            <div class="timeline-dot"></div>
+            <div>
+              <h3>{{ request.brandName }}</h3>
+              <p>{{ request.message }}</p>
+              <span>{{ request.status }}</span>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #emptyActivity>
+          <div class="empty-state">
+            <div class="empty-icon">✦</div>
+            <h3>No applications yet</h3>
+            <p>Start applying to campaigns and your activity feed will appear here.</p>
+          </div>
+        </ng-template>
+      </div>
     </div>
 
-  </div>
+    <aside class="sidebar">
+      <div class="panel sidebar-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Profile Completion</h2>
+            <p>You're 78% ready</p>
+          </div>
+        </div>
 
-  <div class="card">
-    <div class="card-header">Brand Requests</div>
-    <div class="card-body">
-      <table class="table">
+        <div class="progress-block">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+          <span class="progress-text">Add portfolio links to unlock more campaigns</span>
+        </div>
 
-        <thead>
+        <div class="sidebar-stats">
+          <div>
+            <strong>24.8K</strong>
+            <span>Followers</span>
+          </div>
+          <div>
+            <strong>₹6K</strong>
+            <span>Price/Post</span>
+          </div>
+          <div>
+            <strong>1.2K</strong>
+            <span>Profile Views</span>
+          </div>
+        </div>
+      </div>
 
-        <tr>
+      <div class="panel sidebar-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Quick Tips</h2>
+            <p>Small upgrades, big impact</p>
+          </div>
+        </div>
 
-          <th>Brand</th>
-
-          <th>Message</th>
-
-          <th>Status</th>
-
-        </tr>
-
-        </thead>
-
-        <tbody>
-
-        <tr *ngFor="let request of requests">
-
-          <td>
-            {{ request.brandName }}
-          </td>
-
-          <td>
-            {{ request.message }}
-          </td>
-
-          <td>
-            {{ request.status }}
-          </td>
-
-        </tr>
-
-        </tbody>
-
-      </table>
-    </div>
-  </div>
-
+        <ul class="tips-list">
+          <li>Keep your portfolio links updated.</li>
+          <li>Reply quickly to brand inquiries.</li>
+          <li>Highlight your best-performing content.</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
 </div>

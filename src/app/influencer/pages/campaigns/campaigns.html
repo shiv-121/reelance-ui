@@ -1,5 +1,71 @@
-<div class="container mt-5">
-  <h1 class="mb-4">Browse Campaigns</h1>
+<div class="campaign-page">
+  <section class="hero-card">
+    <div class="hero-copy">
+      <div class="eyebrow">Creator Marketplace</div>
+      <h1>Browse Campaigns</h1>
+      <p>Discover paid collaborations from brands that match your audience.</p>
+    </div>
+
+    <button class="btn btn-primary" type="button">My Applications</button>
+  </section>
+
+  <section class="search-shell">
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search campaigns..." />
+    </div>
+
+    <div class="chip-row">
+      <button class="chip active" type="button">Fashion</button>
+      <button class="chip" type="button">Travel</button>
+      <button class="chip" type="button">Gaming</button>
+      <button class="chip" type="button">Lifestyle</button>
+      <button class="chip" type="button">Food</button>
+      <button class="chip" type="button">Technology</button>
+    </div>
+  </section>
+
+  <section class="toolbar">
+    <div class="toolbar-field">
+      <label>Followers</label>
+      <select>
+        <option>10K+</option>
+        <option>50K+</option>
+        <option>100K+</option>
+      </select>
+    </div>
+    <div class="toolbar-field">
+      <label>Budget</label>
+      <select>
+        <option>₹10K+</option>
+        <option>₹20K+</option>
+        <option>₹50K+</option>
+      </select>
+    </div>
+    <div class="toolbar-field">
+      <label>Brand</label>
+      <select>
+        <option>Any Brand</option>
+        <option>Nike</option>
+        <option>Samsung</option>
+      </select>
+    </div>
+    <div class="toolbar-field">
+      <label>Newest</label>
+      <select>
+        <option>Most Recent</option>
+        <option>Closest Deadline</option>
+      </select>
+    </div>
+    <div class="toolbar-field">
+      <label>Deadline</label>
+      <select>
+        <option>Any Time</option>
+        <option>This Week</option>
+        <option>This Month</option>
+      </select>
+    </div>
+  </section>
 
   @if (error) {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -16,71 +82,97 @@
   }
 
   @if (loading) {
-    <div class="text-center py-5">
+    <div class="loading-state">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
   }
 
-  <div class="row">
+  <section class="featured-section">
+    <div class="section-heading">
+      <h2>Featured Campaigns</h2>
+      <p>Top picks for creators this week</p>
+    </div>
+
+    <div class="featured-row">
+      <article class="featured-card">
+        <div class="featured-badge">Featured</div>
+        <h3>Nike</h3>
+        <p>Summer Collection Launch</p>
+        <div class="match-pill">92%</div>
+      </article>
+      <article class="featured-card">
+        <div class="featured-badge">Featured</div>
+        <h3>Samsung</h3>
+        <p>Creator Tech Review</p>
+        <div class="match-pill">85%</div>
+      </article>
+      <article class="featured-card">
+        <div class="featured-badge">Featured</div>
+        <h3>Adidas</h3>
+        <p>Running Club Content</p>
+        <div class="match-pill">76%</div>
+      </article>
+    </div>
+  </section>
+
+  <div class="campaign-grid">
     @for (campaign of campaigns; track campaign.campaignId) {
-      <div class="col-md-6 mb-4">
-        <div class="card campaign-card">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title mb-0">{{ campaign.title }}</h5>
-              <span 
-                class="badge"
-                [ngClass]="getCampaignStatusClass(campaign.status)">
-                {{ campaign.status }}
-              </span>
+      <article class="campaign-card">
+        <div class="campaign-card-head">
+          <div class="brand-block">
+            <div class="brand-logo">{{ campaign.brandName.charAt(0).toUpperCase() }}</div>
+            <div>
+              <h3>{{ campaign.brandName }}</h3>
+              <p class="verified">Verified Brand ✔</p>
             </div>
-            
-            <p class="text-muted small mb-3">
-              <strong>Brand:</strong> {{ campaign.brandName }}
-            </p>
+          </div>
+          <div class="match-badge">{{ (92 - (campaign.campaignId % 8)) }}%</div>
+        </div>
 
-            <p class="card-text">{{ campaign.description }}</p>
+        <div class="campaign-body">
+          <h4>{{ campaign.title }}</h4>
+          <p>{{ campaign.description }}</p>
 
-            <div class="campaign-info mb-3">
-              <div class="info-row">
-                <strong>Budget:</strong>
-                <span class="badge bg-info">₹{{ campaign.budget | number }}</span>
-              </div>
-              <div class="info-row">
-                <strong>Niche:</strong>
-                <span>{{ campaign.niche }}</span>
-              </div>
-              <div class="info-row">
-                <strong>Deadline:</strong>
-                <span>{{ campaign.deadline }}</span>
-              </div>
+          <div class="meta-grid">
+            <div>
+              <span>Budget</span>
+              <strong>₹{{ campaign.budget | number }}</strong>
             </div>
+            <div>
+              <span>Followers</span>
+              <strong>120K+</strong>
+            </div>
+            <div>
+              <span>Deadline</span>
+              <strong>{{ campaign.deadline }}</strong>
+            </div>
+            <div>
+              <span>Category</span>
+              <strong>{{ campaign.niche }}</strong>
+            </div>
+          </div>
 
-            @if (campaign.status === 'OPEN') {
-              <button 
-                class="btn btn-primary w-100"
-                (click)="openApplyForm(campaign.campaignId)"
-                [disabled]="loading">
-                Apply Now
-              </button>
-            } @else {
-              <button 
-                class="btn btn-secondary w-100" 
-                disabled>
-                {{ campaign.status === 'CLOSED' ? 'Campaign Closed' : 'Campaign Completed' }}
-              </button>
-            }
+          <div class="campaign-footer">
+            <div class="posted">Posted 2 hours ago</div>
+            <div class="card-actions">
+              @if (campaign.status === 'OPEN') {
+                <button class="btn btn-secondary" type="button" (click)="openApplyForm(campaign.campaignId)" [disabled]="loading">Apply</button>
+              } @else {
+                <button class="btn btn-secondary" type="button" disabled>{{ campaign.status === 'CLOSED' ? 'Closed' : 'Completed' }}</button>
+              }
+              <button class="btn btn-primary" type="button">View Details</button>
+            </div>
           </div>
         </div>
-      </div>
+      </article>
     } @empty {
       @if (!loading) {
-        <div class="col-12">
-          <div class="alert alert-info" role="alert">
-            No campaigns available right now. Check back soon!
-          </div>
+        <div class="empty-state">
+          <div class="empty-icon">✦</div>
+          <h3>No campaigns available</h3>
+          <p>Check back soon for fresh opportunities.</p>
         </div>
       }
     }
@@ -92,11 +184,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Apply to Campaign</h5>
-            <button 
-              type="button" 
-              class="btn-close" 
-              (click)="closeApplyForm()"
-              [disabled]="loading"></button>
+            <button type="button" class="btn-close" (click)="closeApplyForm()" [disabled]="loading"></button>
           </div>
 
           <form (ngSubmit)="submitApplication()">
@@ -108,65 +196,26 @@
               }
 
               <div class="mb-3">
-                <label for="proposal" class="form-label">
-                  Proposal <span class="text-danger">*</span>
-                </label>
-                <textarea 
-                  class="form-control" 
-                  id="proposal"
-                  rows="4"
-                  [(ngModel)]="applicationForm.proposal"
-                  name="proposal"
-                  placeholder="Tell the brand why you're a great fit for this campaign..."
-                  required></textarea>
-                <small class="form-text text-muted">
-                  Share your experience, followers, and why you'd be perfect for this campaign.
-                </small>
+                <label for="proposal" class="form-label">Proposal <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="proposal" rows="4" [(ngModel)]="applicationForm.proposal" name="proposal" placeholder="Tell the brand why you're a great fit for this campaign..." required></textarea>
+                <small class="form-text text-muted">Share your experience, followers, and why you'd be perfect for this campaign.</small>
               </div>
 
               <div class="mb-3">
-                <label for="expectedPrice" class="form-label">
-                  Expected Price (₹) <span class="text-danger">*</span>
-                </label>
-                <input 
-                  type="number" 
-                  class="form-control" 
-                  id="expectedPrice"
-                  [(ngModel)]="applicationForm.expectedPrice"
-                  name="expectedPrice"
-                  placeholder="Enter your expected compensation"
-                  required>
+                <label for="expectedPrice" class="form-label">Expected Price (₹) <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="expectedPrice" [(ngModel)]="applicationForm.expectedPrice" name="expectedPrice" placeholder="Enter your expected compensation" required>
               </div>
 
               <div class="mb-3">
-                <label for="portfolioLink" class="form-label">
-                  Portfolio Link <span class="text-muted">(Optional)</span>
-                </label>
-                <input 
-                  type="url" 
-                  class="form-control" 
-                  id="portfolioLink"
-                  [(ngModel)]="applicationForm.portfolioLink"
-                  name="portfolioLink"
-                  placeholder="https://your-portfolio.com">
-                <small class="form-text text-muted">
-                  Link to your portfolio or latest work samples.
-                </small>
+                <label for="portfolioLink" class="form-label">Portfolio Link <span class="text-muted">(Optional)</span></label>
+                <input type="url" class="form-control" id="portfolioLink" [(ngModel)]="applicationForm.portfolioLink" name="portfolioLink" placeholder="https://your-portfolio.com">
+                <small class="form-text text-muted">Link to your portfolio or latest work samples.</small>
               </div>
             </div>
 
             <div class="modal-footer">
-              <button 
-                type="button" 
-                class="btn btn-secondary" 
-                (click)="closeApplyForm()"
-                [disabled]="loading">
-                Cancel
-              </button>
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                [disabled]="loading || !isApplicationFormValid()">
+              <button type="button" class="btn btn-secondary" (click)="closeApplyForm()" [disabled]="loading">Cancel</button>
+              <button type="submit" class="btn btn-primary" [disabled]="loading || !isApplicationFormValid()">
                 @if (loading) {
                   <span class="spinner-border spinner-border-sm me-2" role="status"></span>
                   Submitting...
