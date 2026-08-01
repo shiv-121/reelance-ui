@@ -2,9 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { Campaign } from '../../models/campaign';
 import { CreateCampaignRequest } from '../../models/create-campaign-request';
+import { CampaignWorkspaceResponse } from '../../models/campaign-page-response';
 import { CampaignService } from '../../services/campaign.service';
 
 @Component({
@@ -22,6 +24,24 @@ export class Campaigns implements OnInit {
   protected showCreateForm = false;
   protected loading = false;
   protected error: string | null = null;
+  protected searchTerm = '';
+  protected statusFilter = '';
+  protected nicheFilter = '';
+  protected sortValue = 'createdAt,desc';
+  protected page = 0;
+  protected pageSize = 5;
+  protected totalPages = 0;
+  protected totalElements = 0;
+  protected currentPageLabel = 1;
+  protected summary = {
+    totalCampaigns: 0,
+    openCampaigns: 0,
+    closedCampaigns: 0,
+    completedCampaigns: 0,
+    totalBudget: 0
+  };
+
+  private searchSubject = new Subject<string>();
 
   protected createForm: CreateCampaignRequest = {
     title: '',
@@ -32,6 +52,15 @@ export class Campaigns implements OnInit {
   };
 
   ngOnInit(): void {
+    this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((value) => {
+      this.searchTerm = value;
+      this.page = 0;
+      this.loadCampaigns();
+    });
+
     this.loadCampaigns();
   }
 
@@ -39,17 +68,72 @@ export class Campaigns implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.campaignService.getMyCampaigns().subscribe({
-      next: (data) => {
-        this.campaigns = data;
+    this.campaignService.getBrandCampaignsPage(
+      this.page,
+      this.pageSize,
+      this.searchTerm || undefined,
+      this.statusFilter || undefined,
+      this.nicheFilter || undefined,
+      this.sortValue || undefined
+    ).subscribe({
+      next: (data: CampaignWorkspaceResponse) => {
+        this.campaigns = data.campaigns as Campaign[];
+        this.totalPages = data.totalPages;
+        this.totalElements = data.totalElements;
+        this.pageSize = data.pageSize;
+        this.page = data.currentPage;
+        this.currentPageLabel = data.currentPage + 1;
+        this.summary = {
+          totalCampaigns: data.totalCampaigns,
+          openCampaigns: data.openCampaigns,
+          closedCampaigns: data.closedCampaigns,
+          completedCampaigns: data.completedCampaigns,
+          totalBudget: data.totalBudget
+        };
         this.loading = false;
       },
       error: (err) => {
-        this.error = 'Failed to load campaigns';
+        this.error = 'Unable to load campaigns.';
         console.error(err);
         this.loading = false;
       }
     });
+  }
+
+  protected onSearchInput(value: string): void {
+    this.searchSubject.next(value);
+  }
+
+  protected onStatusChange(value: string): void {
+    this.statusFilter = value === 'All' ? '' : value;
+    this.page = 0;
+    this.loadCampaigns();
+  }
+
+  protected onNicheChange(value: string): void {
+    this.nicheFilter = value;
+    this.page = 0;
+    this.loadCampaigns();
+  }
+
+  protected onSortChange(value: string): void {
+    this.sortValue = value;
+    this.page = 0;
+    this.loadCampaigns();
+  }
+
+  protected nextPage(): void {
+    if (this.page < this.totalPages - 1) {
+      this.page += 1;
+      this.loadCampaigns();
+    }
+  }
+
+  protected previousPage(): void {
+    if (this.page > 0) {
+      this.page -= 1;
+      this.loadCampaigns();
+    }
   }
 
   protected toggleCreateForm(): void {
@@ -57,6 +141,10 @@ export class Campaigns implements OnInit {
     if (!this.showCreateForm) {
       this.resetForm();
     }
+  }
+
+  protected retry(): void {
+    this.loadCampaigns();
   }
 
   protected submitCreateCampaign(): void {

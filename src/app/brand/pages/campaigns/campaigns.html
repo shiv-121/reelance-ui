@@ -14,6 +14,7 @@
   @if (error) {
     <div class="alert-card" role="alert">
       {{ error }}
+      <button class="secondary-btn small" type="button" (click)="retry()">Retry</button>
     </div>
   }
 
@@ -71,35 +72,43 @@
 
   <section class="summary-grid">
     <article class="summary-card">
+      <div class="summary-icon">�</div>
+      <div>
+        <p>Total Campaigns</p>
+        <strong>{{ summary.totalCampaigns }}</strong>
+        <span>Across your workspace</span>
+      </div>
+    </article>
+    <article class="summary-card">
       <div class="summary-icon">🚀</div>
       <div>
-        <p>Active Campaigns</p>
-        <strong>4</strong>
+        <p>Open Campaigns</p>
+        <strong>{{ summary.openCampaigns }}</strong>
         <span>Live launches</span>
+      </div>
+    </article>
+    <article class="summary-card">
+      <div class="summary-icon">🔒</div>
+      <div>
+        <p>Closed Campaigns</p>
+        <strong>{{ summary.closedCampaigns }}</strong>
+        <span>Paused or archived</span>
       </div>
     </article>
     <article class="summary-card">
       <div class="summary-icon">🏁</div>
       <div>
         <p>Completed Campaigns</p>
-        <strong>12</strong>
+        <strong>{{ summary.completedCampaigns }}</strong>
         <span>Finished work</span>
-      </div>
-    </article>
-    <article class="summary-card">
-      <div class="summary-icon">📬</div>
-      <div>
-        <p>Applications Received</p>
-        <strong>28</strong>
-        <span>Waiting for review</span>
       </div>
     </article>
     <article class="summary-card">
       <div class="summary-icon">💸</div>
       <div>
         <p>Total Budget</p>
-        <strong>₹1.2L</strong>
-        <span>Across active campaigns</span>
+        <strong>₹{{ summary.totalBudget | number }}</strong>
+        <span>Across all campaigns</span>
       </div>
     </article>
   </section>
@@ -114,25 +123,24 @@
 
     <div class="filter-controls">
       <label class="search-field">
-        <input type="text" placeholder="Search campaign...">
+        <input type="text" placeholder="Search campaign..." [ngModel]="searchTerm" (ngModelChange)="onSearchInput($event)">
       </label>
 
       <label class="search-field compact-select">
-        <select>
-          <option>Status</option>
-          <option>All</option>
-          <option>Open</option>
-          <option>Completed</option>
-          <option>Closed</option>
+        <select [ngModel]="statusFilter" (ngModelChange)="onStatusChange($event)">
+          <option value="">Status</option>
+          <option value="">All</option>
+          <option value="OPEN">Open</option>
+          <option value="COMPLETED">Completed</option>
+          <option value="CLOSED">Closed</option>
         </select>
       </label>
 
       <label class="search-field compact-select">
-        <select>
-          <option>Sort</option>
-          <option>Newest</option>
-          <option>Oldest</option>
-          <option>Budget</option>
+        <select [ngModel]="sortValue" (ngModelChange)="onSortChange($event)">
+          <option value="createdAt,desc">Newest</option>
+          <option value="createdAt,asc">Oldest</option>
+          <option value="budget,desc">Budget</option>
         </select>
       </label>
     </div>
@@ -141,8 +149,8 @@
   @if (!loading && campaigns.length === 0) {
     <section class="empty-state">
       <div class="empty-icon">✨</div>
-      <h3>No campaigns created yet</h3>
-      <p>Create your first campaign and start collaborating with creators.</p>
+      <h3>No campaigns found</h3>
+      <p>Try a different search or filter, or create your first campaign to get started.</p>
       <button class="primary-btn" type="button" (click)="toggleCreateForm()">Create Campaign</button>
     </section>
   } @else {
@@ -200,6 +208,12 @@
         </article>
       }
     </section>
+
+    <div class="filter-controls" style="justify-content: space-between; margin-top: 1rem;">
+      <button class="secondary-btn small" type="button" (click)="previousPage()" [disabled]="page === 0">Previous</button>
+      <span>Page {{ currentPageLabel }} of {{ totalPages || 1 }}</span>
+      <button class="secondary-btn small" type="button" (click)="nextPage()" [disabled]="page >= totalPages - 1">Next</button>
+    </div>
   }
 </div>
 
