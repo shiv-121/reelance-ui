@@ -1,0 +1,75 @@
+<div class="edit-container">
+
+  <div class="edit-card">
+
+    <a
+      routerLink="/profile"
+      class="back-link">
+
+      ← Back to Profile
+
+    </a>
+
+    <h1>
+
+      Edit Profile
+
+    </h1>
+
+    <label>
+
+      Instagram Handle
+
+    </label>
+
+    <input
+      [(ngModel)]="
+        profile.instagramHandle
+      ">
+
+    <label>
+
+      Followers
+
+    </label>
+
+    <input
+      type="number"
+      [(ngModel)]="
+        profile.followers
+      ">
+
+    <label>
+
+      Niche
+
+    </label>
+
+    <input
+      [(ngModel)]="
+        profile.niche
+      ">
+
+    <label>
+
+      Price Per Post
+
+    </label>
+
+    <input
+      type="number"
+      [(ngModel)]="
+        profile.pricePerPost
+      ">
+
+    <button
+      class="save-btn"
+      (click)="saveProfile()">
+
+      Save Changes
+
+    </button>
+
+  </div>
+
+</div>

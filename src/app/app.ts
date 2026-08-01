@@ -15,11 +15,12 @@ export class App {
   protected readonly title = signal('reelance-ui');
 
   protected get showNavbar(): boolean {
-    const hiddenRoutes = [
+
+    return ![
       '/login',
       '/register'
-    ];
-
-    return !hiddenRoutes.includes(this.router.url);
+    ].includes(
+      this.router.url
+    );
   }
 }

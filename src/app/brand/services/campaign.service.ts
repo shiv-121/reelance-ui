@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Campaign } from '../models/campaign';
 import { CreateCampaignRequest } from '../models/create-campaign-request';
 import { Application } from '../models/application';
+import { Participant } from '../models/participant';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,10 @@ export class CampaignService {
 
   rejectApplication(applicationId: number): Observable<any> {
     return this.http.patch(`http://localhost:8080/api/campaign-applications/${applicationId}?status=REJECTED`, {});
+  }
+
+  getCampaignParticipants(campaignId: number): Observable<Participant[]> {
+    return this.http.get<Participant[]>(`http://localhost:8080/api/campaigns/${campaignId}/participants`);
   }
 }
 

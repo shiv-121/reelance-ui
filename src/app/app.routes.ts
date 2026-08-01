@@ -2,6 +2,15 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
+
+    {
+  path: 'profile/edit',
+  canActivate: [authGuard],
+  loadComponent: () =>
+    import('./pages/profile-edit/profile-edit')
+      .then(m => m.ProfileEdit)
+},
+
   {
     path: '',
     redirectTo: 'login',
@@ -53,6 +62,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/campaigns/:id/participants',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./brand/pages/campaign-participants/campaign-participants')
+        .then(m => m.CampaignParticipants)
+  },
+
+  {
     path: 'influencer',
     redirectTo: 'influencer/dashboard',
     pathMatch: 'full'
@@ -96,6 +113,39 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/profile/profile')
         .then(m => m.Profile)
+  },
+
+  {
+    path: 'profile/setup',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './influencer/pages/profile-setup/profile-setup'
+      ).then(
+        m => m.ProfileSetup
+      )
+  },
+
+  {
+    path: 'brand/influencers',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './brand/pages/influencers/influencers'
+      ).then(
+        m => m.Influencers
+      )
+  },
+
+  {
+    path: 'brand/influencers/:id',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import(
+        './brand/pages/influencer-detail/influencer-detail'
+      ).then(
+        m => m.InfluencerDetail
+      )
   },
 
   {

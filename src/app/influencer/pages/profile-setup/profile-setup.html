@@ -1,0 +1,85 @@
+<div class="setup-container">
+
+  <h1>
+    Complete Your Creator Profile
+  </h1>
+
+  <p>
+    Help brands discover you.
+  </p>
+
+  @if (error) {
+
+    <div class="error-box">
+      {{ error }}
+    </div>
+
+  }
+
+  <div class="form-group">
+
+    <label>
+      Instagram Handle
+    </label>
+
+    <input
+      type="text"
+      [(ngModel)]="instagramHandle"
+      placeholder="@creator"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label>
+      Followers
+    </label>
+
+    <input
+      type="number"
+      [(ngModel)]="followers"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label>
+      Niche
+    </label>
+
+    <input
+      type="text"
+      [(ngModel)]="niche"
+      placeholder="Fashion"
+    />
+
+  </div>
+
+  <div class="form-group">
+
+    <label>
+      Price Per Post
+    </label>
+
+    <input
+      type="number"
+      [(ngModel)]="pricePerPost"
+    />
+
+  </div>
+
+  <button
+    (click)="saveProfile()"
+    [disabled]="loading">
+
+    {{
+      loading
+      ? 'Saving...'
+      : 'Save Profile'
+    }}
+
+  </button>
+
+</div>

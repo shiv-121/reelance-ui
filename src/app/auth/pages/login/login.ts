@@ -6,6 +6,8 @@ import { AuthService } from '../../../core/services/auth.service';
 import { TokenService } from '../../../core/services/token.service';
 import { LoginRequest } from '../../../core/models/login-request';
 import { LoginResponse } from '../../../core/models/login-response';
+import { InfluencerProfileService }
+from '../../../influencer/services/influencer-profile.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +23,8 @@ export class Login {
   private authService = inject(AuthService);
   private tokenService = inject(TokenService);
   private router = inject(Router);
+  private profileService =
+    inject(InfluencerProfileService);
 
   login(): void {
     this.authService.login({
@@ -32,10 +36,42 @@ export class Login {
         this.tokenService.setRole(response.role);
 
         if (response.role === 'BRAND') {
-          this.router.navigate(['/brand']);
-        } else {
-          this.router.navigate(['/influencer']);
+          this.router.navigate([
+            '/brand'
+          ]);
+
+          return;
         }
+
+        this.profileService
+          .getMyProfile()
+          .subscribe({
+
+            next: () => {
+
+              this.router.navigate([
+                '/influencer'
+              ]);
+            },
+
+            error: (err) => {
+
+              if (
+                err.status === 404
+              ) {
+
+                this.router.navigate([
+                  '/profile/setup'
+                ]);
+
+              } else {
+
+                alert(
+                  'Unable to load profile'
+                );
+              }
+            }
+          });
       },
       error: (err: unknown) => {
         alert('Invalid credentials');

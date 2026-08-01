@@ -1,12 +1,124 @@
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-body">
-          <h2>Profile</h2>
-          <p class="text-muted">Profile management coming soon.</p>
-        </div>
-      </div>
+<div class="profile-container">
+
+  <div class="profile-banner">
+
+    <a
+      class="edit-btn"
+      routerLink="/profile/edit">
+
+      Edit Profile
+
+    </a>
+
+    <div class="avatar">
+
+      {{
+        profile.instagramHandle
+          ? profile.instagramHandle
+              .charAt(1)
+              .toUpperCase()
+          : 'I'
+      }}
+
     </div>
+
+    <h1>
+
+      {{ profile.instagramHandle }}
+
+    </h1>
+
+    <p class="subtitle">
+
+      {{ profile.niche }} Creator
+
+    </p>
+
   </div>
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+
+      <h3>
+
+        Followers
+
+      </h3>
+
+      <p>
+
+        {{ profile.followers }}
+
+      </p>
+
+    </div>
+
+    <div class="stat-card">
+
+      <h3>
+
+        Niche
+
+      </h3>
+
+      <p>
+
+        {{ profile.niche }}
+
+      </p>
+
+    </div>
+
+    <div class="stat-card">
+
+      <h3>
+
+        Price Per Post
+
+      </h3>
+
+      <p>
+
+        ₹{{ profile.pricePerPost }}
+
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="section-card">
+
+    <h2>
+
+      About
+
+    </h2>
+
+    <p>
+
+      Tell brands who you are, what kind of content you create,
+      and why they should collaborate with you.
+
+    </p>
+
+  </div>
+
+  <div class="section-card">
+
+    <h2>
+
+      Portfolio
+
+    </h2>
+
+    <div class="portfolio-placeholder">
+
+      Portfolio showcase coming soon
+
+    </div>
+
+  </div>
+
 </div>
