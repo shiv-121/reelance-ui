@@ -17,27 +17,65 @@ export class Register {
   email = '';
   password = '';
   role = 'BRAND';
+  isSubmitting = false;
+  errorMessage = '';
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
   register(): void {
+    if (this.isSubmitting) {
+      return;
+    }
+
+    const username = this.username.trim();
+    const email = this.email.trim();
+
+    if (!username || !email || !this.password) {
+      this.errorMessage = 'Please fill in all required fields.';
+      return;
+    }
+
     const request: RegisterRequest = {
-      username: this.username,
-      email: this.email,
+      username,
+      email,
       password: this.password,
       role: this.role
     };
 
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
     this.authService.register(request).subscribe({
       next: () => {
+        this.isSubmitting = false;
         alert('Registration successful');
         this.router.navigate(['/login']);
       },
       error: (err: unknown) => {
+        this.isSubmitting = false;
         console.error('Registration failed', err);
-        alert('Registration failed');
+        this.errorMessage = this.getErrorMessage(err);
+        alert(this.errorMessage);
       }
     });
+  }
+
+  private getErrorMessage(err: unknown): string {
+    const error = err as { error?: { message?: string }; message?: string; status?: number };
+
+    if (error?.status === 409) {
+      return 'An account with this email or username already exists. Please try logging in instead.';
+    }
+
+    if (error?.error?.message) {
+      return error.error.message;
+    }
+
+    if (error?.message) {
+      return error.message;
+    }
+
+    return 'Registration failed';
   }
 }
