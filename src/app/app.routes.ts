@@ -54,6 +54,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/applications',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./brand/pages/applications/applications')
+        .then(m => m.Applications)
+  },
+
+  {
     path: 'brand/campaigns/:id/applications',
     canActivate: [authGuard],
     loadComponent: () =>

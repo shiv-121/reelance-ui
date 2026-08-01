@@ -11,97 +11,181 @@
     </a>
   </section>
 
-  <section class="stats-grid">
-    <article class="stat-card">
-      <div class="stat-icon">🤝</div>
-      <div>
-        <h3>{{ collaborations.length }}</h3>
-        <p>Collaborations</p>
-      </div>
-    </article>
+  @if (isLoading) {
+    <section class="stats-grid">
+      @for (item of [1, 2, 3, 4]; track item) {
+        <article class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div>
+            <h3>—</h3>
+            <p>Loading...</p>
+          </div>
+        </article>
+      }
+    </section>
 
-    <article class="stat-card">
-      <div class="stat-icon">⏳</div>
-      <div>
-        <h3>{{ pendingCount }}</h3>
-        <p>Pending</p>
-      </div>
-    </article>
+    <section class="quick-actions">
+      @for (item of [1, 2, 3]; track item) {
+        <article class="action-card">
+          <h3>Loading...</h3>
+          <p>Please wait while your dashboard loads.</p>
+        </article>
+      }
+    </section>
+  } @else if (hasError) {
+    <section class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-icon">⚠️</div>
+        <div>
+          <h3>0</h3>
+          <p>Unable to load dashboard.</p>
+        </div>
+      </article>
+    </section>
 
-    <article class="stat-card">
-      <div class="stat-icon">✅</div>
-      <div>
-        <h3>{{ acceptedCount }}</h3>
-        <p>Accepted</p>
-      </div>
-    </article>
-
-    <article class="stat-card">
-      <div class="stat-icon">🎉</div>
-      <div>
-        <h3>{{ completedCount }}</h3>
-        <p>Completed</p>
-      </div>
-    </article>
-  </section>
-
-  <section class="quick-actions">
-    <a class="action-card" routerLink="/brand/campaigns">
-      <h3>Create Campaign</h3>
-      <p>Launch a fresh creator activation.</p>
-    </a>
-
-    <a class="action-card" routerLink="/brand/influencers">
-      <h3>Discover Creators</h3>
-      <p>Find the right creators for your next wave.</p>
-    </a>
-
-    <a class="action-card" routerLink="/brand/campaigns">
-      <h3>Campaigns</h3>
-      <p>Track ongoing work and performance.</p>
-    </a>
-  </section>
-
-  <section class="collab-section">
-    <div class="section-heading">
-      <div>
-        <p class="eyebrow">Recent Activity</p>
-        <h2>Recent Collaborations</h2>
-      </div>
-    </div>
-
-    @if (collaborations.length === 0) {
+    <section class="collab-section">
       <div class="empty-state">
-        <div class="empty-icon">🎯</div>
-        <h3>No collaborations yet.</h3>
-        <p>Create your first campaign to start working with creators.</p>
-        <a class="primary-btn" routerLink="/brand/campaigns">Create Campaign</a>
+        <div class="empty-icon">⚠️</div>
+        <h3>Unable to load dashboard.</h3>
+        <p>Please try again in a moment.</p>
+        <button class="primary-btn" type="button" (click)="loadDashboard()">Retry</button>
       </div>
-    } @else {
-      <div class="collab-list">
-        @for (c of collaborations; track c.collaborationId) {
-          <article class="collab-card">
-            <div class="collab-top">
-              <div>
-                <h3>{{ c.influencerUsername }}</h3>
-                <p class="collab-preview">{{ c.message }}</p>
-              </div>
-              <span class="status-badge" [ngClass]="{
-                'status-pending': c.status === 'PENDING',
-                'status-accepted': c.status === 'ACCEPTED',
-                'status-completed': c.status === 'COMPLETED'
-              }">
-                {{ c.status }}
-              </span>
-            </div>
+    </section>
+  } @else {
+    <section class="stats-grid">
+      <article class="stat-card dashboard-card" (click)="navigateToCard('/brand/campaigns', { status: 'OPEN' })">
+        <div class="stat-icon">📣</div>
+        <div>
+          <h3>{{ dashboard?.activeCampaigns ?? 0 }}</h3>
+          <p>Active Campaigns</p>
+        </div>
+      </article>
 
-            <div class="collab-footer">
-              <span class="collab-id">#{{ c.collaborationId }}</span>
-              <button class="ghost-btn" type="button" disabled>View Creator</button>
-            </div>
-          </article>
-        }
+      <article class="stat-card dashboard-card" (click)="navigateToCard('/brand/applications', { status: 'PENDING' })">
+        <div class="stat-icon">⏳</div>
+        <div>
+          <h3>{{ pendingCount }}</h3>
+          <p>Pending Applications</p>
+        </div>
+      </article>
+
+      <article class="stat-card dashboard-card" (click)="navigateToCard('/brand/applications', { status: 'ACCEPTED' })">
+        <div class="stat-icon">✅</div>
+        <div>
+          <h3>{{ acceptedCount }}</h3>
+          <p>Accepted Applications</p>
+        </div>
+      </article>
+
+      <article class="stat-card dashboard-card" (click)="navigateToCard('/brand/campaigns', { sort: 'budget' })">
+        <div class="stat-icon">💸</div>
+        <div>
+          <h3>{{ totalBudget | currency:'USD':'symbol':'1.0-0' }}</h3>
+          <p>Total Budget</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="quick-actions">
+      <a class="action-card" routerLink="/brand/campaigns">
+        <h3>Create Campaign</h3>
+        <p>Launch a fresh creator activation.</p>
+      </a>
+
+      <a class="action-card" routerLink="/brand/influencers">
+        <h3>Discover Creators</h3>
+        <p>Find the right creators for your next wave.</p>
+      </a>
+
+      <a class="action-card" routerLink="/brand/campaigns">
+        <h3>Campaigns</h3>
+        <p>Track ongoing work and performance.</p>
+      </a>
+    </section>
+
+    <section class="collab-section">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Recent Activity</p>
+          <h2>Recent Campaigns</h2>
+        </div>
       </div>
-    }
-  </section>
+
+      @if (recentCampaigns.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">🎯</div>
+          <h3>No campaigns yet.</h3>
+          <p>Create your first campaign to start working with creators.</p>
+          <a class="primary-btn" routerLink="/brand/campaigns">Create Campaign</a>
+        </div>
+      } @else {
+        <div class="collab-list">
+          @for (campaign of recentCampaigns; track campaign.campaignId) {
+            <article class="collab-card">
+              <div class="collab-top">
+                <div>
+                  <h3>{{ campaign.title }}</h3>
+                  <p class="collab-preview">Budget: {{ campaign.budget | currency:'USD':'symbol':'1.0-0' }}</p>
+                </div>
+                <span class="status-badge" [ngClass]="{
+                  'status-pending': campaign.status === 'PENDING' || campaign.status === 'DRAFT',
+                  'status-accepted': campaign.status === 'ACTIVE' || campaign.status === 'OPEN',
+                  'status-completed': campaign.status === 'COMPLETED' || campaign.status === 'CLOSED'
+                }">
+                  {{ campaign.status }}
+                </span>
+              </div>
+
+              <div class="collab-footer">
+                <span class="collab-id">#{{ campaign.campaignId }}</span>
+                <span class="collab-id">{{ campaign.deadline }}</span>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="collab-section" style="margin-top: 1.5rem;">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Recent Activity</p>
+          <h2>Recent Applications</h2>
+        </div>
+      </div>
+
+      @if (recentApplications.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">📝</div>
+          <h3>No applications yet.</h3>
+          <p>Your recent campaign applications will appear here.</p>
+        </div>
+      } @else {
+        <div class="collab-list">
+          @for (application of recentApplications; track application.applicationId) {
+            <article class="collab-card">
+              <div class="collab-top">
+                <div>
+                  <h3>{{ application.creatorName }}</h3>
+                  <p class="collab-preview">{{ application.campaignTitle }}</p>
+                </div>
+                <span class="status-badge" [ngClass]="{
+                  'status-pending': application.status === 'PENDING',
+                  'status-accepted': application.status === 'ACCEPTED',
+                  'status-completed': application.status === 'COMPLETED' || application.status === 'REJECTED'
+                }">
+                  {{ application.status }}
+                </span>
+              </div>
+
+              <div class="collab-footer">
+                <span class="collab-id">#{{ application.applicationId }}</span>
+                <span class="collab-id">{{ application.appliedOn }}</span>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
 </div>

@@ -1,0 +1,104 @@
+<div class="dashboard-shell">
+  <section class="hero-card">
+    <div class="hero-copy">
+      <p class="eyebrow">Creator Workspace</p>
+      <h1>Applications</h1>
+      <p class="hero-description">Manage creator applications for your campaigns.</p>
+    </div>
+
+    <a class="primary-btn" routerLink="/brand/campaigns">
+      View Campaigns
+    </a>
+  </section>
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-icon">📝</div>
+      <div>
+        <h3>{{ applications.length }}</h3>
+        <p>Total Applications</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon">⏳</div>
+      <div>
+        <h3>{{ pendingCount }}</h3>
+        <p>Pending</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div>
+        <h3>{{ acceptedCount }}</h3>
+        <p>Accepted</p>
+      </div>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-icon">✖️</div>
+      <div>
+        <h3>{{ rejectedCount }}</h3>
+        <p>Rejected</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="collab-section">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">Applications</p>
+        <h2>Recent Applications</h2>
+      </div>
+    </div>
+
+    @if (isLoading) {
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        <h3>Loading applications…</h3>
+        <p>Please wait while we load your creator applications.</p>
+      </div>
+    } @else if (filteredApplications.length === 0) {
+      <div class="empty-state">
+        <div class="empty-icon">🧾</div>
+        <h3>No applications found.</h3>
+        <p>Try a different filter or come back later.</p>
+      </div>
+    } @else {
+      <div class="collab-list">
+        @for (application of filteredApplications; track application.applicationId) {
+          <article class="collab-card">
+            <div class="collab-top">
+              <div>
+                <h3>{{ application.influencerUsername }}</h3>
+                <p class="collab-preview">{{ application.campaignTitle }}</p>
+              </div>
+              <span class="status-badge" [ngClass]="{
+                'status-pending': application.status === 'PENDING',
+                'status-accepted': application.status === 'ACCEPTED',
+                'status-completed': application.status === 'REJECTED'
+              }">
+                {{ application.status }}
+              </span>
+            </div>
+
+            <div class="collab-footer">
+              <span class="collab-id">Applied {{ application.expectedPrice | currency:'USD':'symbol':'1.0-0' }}</span>
+              <span class="collab-id">{{ application.proposal }}</span>
+            </div>
+
+            <div class="collab-footer">
+              <span class="collab-id">Campaign: {{ application.campaignTitle }}</span>
+              <div>
+                <button class="ghost-btn" type="button" (click)="viewProfile(application.applicationId)">View Profile</button>
+                <button class="ghost-btn" type="button" (click)="acceptApplication(application.applicationId)">Accept</button>
+                <button class="ghost-btn" type="button" (click)="rejectApplication(application.applicationId)">Reject</button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+</div>

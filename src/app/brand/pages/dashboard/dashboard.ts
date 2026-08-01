@@ -1,12 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
-import { CollaborationService }
-from '../../../core/services/collaboration.service';
-
-import { Collaboration }
-from '../../../core/models/collaboration';
+import { BrandDashboardService } from '../../services/brand-dashboard.service';
+import { BrandDashboardResponse } from '../../models/brand-dashboard-response';
 
 @Component({
   selector: 'app-brand-dashboard',
@@ -19,53 +16,54 @@ from '../../../core/models/collaboration';
   styleUrl: './dashboard.css'
 })
 export class Dashboard implements OnInit {
+  dashboard: BrandDashboardResponse | null = null;
+  isLoading = true;
+  hasError = false;
 
-  collaborations: Collaboration[] = [];
-
-  private collaborationService =
-    inject(CollaborationService);
+  private dashboardService = inject(BrandDashboardService);
+  private router = inject(Router);
 
   ngOnInit(): void {
-
-    this.loadCollaborations();
+    this.loadDashboard();
   }
 
-  loadCollaborations(): void {
+  loadDashboard(): void {
+    this.isLoading = true;
+    this.hasError = false;
 
-    this.collaborationService
-      .getBrandCollaborations()
-      .subscribe({
+    this.dashboardService.getDashboard().subscribe({
+      next: (data) => {
+        this.dashboard = data;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.hasError = true;
+        this.isLoading = false;
+      }
+    });
+  }
 
-        next: (data) => {
-
-          this.collaborations = data;
-        },
-
-        error: (err) => {
-
-          console.error(err);
-        }
-      });
+  get totalBudget(): number {
+    return this.dashboard?.totalBudget ?? 0;
   }
 
   get pendingCount(): number {
-
-    return this.collaborations.filter(
-      c => c.status === 'PENDING'
-    ).length;
+    return this.dashboard?.pendingApplications ?? 0;
   }
 
   get acceptedCount(): number {
-
-    return this.collaborations.filter(
-      c => c.status === 'ACCEPTED'
-    ).length;
+    return this.dashboard?.acceptedApplications ?? 0;
   }
 
-  get completedCount(): number {
+  get recentCampaigns() {
+    return this.dashboard?.recentCampaigns ?? [];
+  }
 
-    return this.collaborations.filter(
-      c => c.status === 'COMPLETED'
-    ).length;
+  get recentApplications() {
+    return this.dashboard?.recentApplications ?? [];
+  }
+
+  navigateToCard(route: string, queryParams?: Record<string, string>): void {
+    this.router.navigate([route], { queryParams });
   }
 }
