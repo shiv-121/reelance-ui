@@ -48,9 +48,9 @@
 
     <button
       class="profile-btn"
-      routerLink="/profile">
+      [routerLink]="isBrand ? '/brand/profile' : '/profile'">
 
-      Profile
+      {{ isBrand ? 'Company' : 'Profile' }}
 
     </button>
 

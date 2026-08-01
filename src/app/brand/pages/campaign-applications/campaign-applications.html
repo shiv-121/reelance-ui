@@ -1,85 +1,128 @@
-<div class="container mt-5">
+<div class="review-shell">
+  <div class="page-header">
+    <div>
+      <button class="back-btn" type="button" (click)="goBack()">← Back</button>
+      <h1>Review Applications</h1>
+      <p>Review creators who applied to your campaign.</p>
+    </div>
 
-  <button class="btn btn-secondary mb-4" (click)="goBack()">
-    ← Back
-  </button>
-
-  <h2 class="mb-4">Campaign Applications</h2>
+    <div class="header-badges">
+      <span class="header-badge">Campaign #{{ campaignId }}</span>
+      <span class="header-badge accent">{{ applications.length }} Applications</span>
+    </div>
+  </div>
 
   @if (successMessage) {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="success-pill" role="alert">
       {{ successMessage }}
     </div>
   }
 
+  <section class="toolbar">
+    <div class="tabs">
+      <button class="tab active" type="button">All <span>({{ applications.length }})</span></button>
+      <button class="tab" type="button">Pending <span>(12)</span></button>
+      <button class="tab" type="button">Shortlisted <span>(4)</span></button>
+      <button class="tab" type="button">Accepted <span>(5)</span></button>
+      <button class="tab" type="button">Rejected <span>(3)</span></button>
+    </div>
+
+    <div class="toolbar-actions">
+      <input class="search-input" type="text" placeholder="Search creator...">
+      <select class="sort-select">
+        <option>Newest</option>
+        <option>Oldest</option>
+      </select>
+    </div>
+  </section>
+
   @if (loading) {
-    <div class="text-center">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+    <div class="loading-card">
+      <div class="spinner" role="status"></div>
+      <p>Loading applications...</p>
     </div>
   }
 
   @if (!loading && applications.length === 0) {
-    <div class="alert alert-info">
-      No applications found.
+    <div class="empty-state">
+      <div class="empty-icon">✨</div>
+      <h3>No creator applications yet</h3>
+      <p>Applications from creators will appear here.</p>
     </div>
   }
 
   @for (app of applications; track app.applicationId) {
-    <div class="application-card">
+    <article class="application-card">
+      <div class="card-top">
+        <div class="creator-meta">
+          <div class="avatar">{{ app.influencerUsername.charAt(0).toUpperCase() }}</div>
+          <div>
+            <div class="creator-name-row">
+              <h3>{{ app.influencerUsername }}</h3>
+              <span class="verified-pill">Verified</span>
+            </div>
+            <p class="creator-handle">@{{ app.influencerUsername.toLowerCase() }}</p>
+            <p class="creator-meta-text">Applied 2 hours ago</p>
+          </div>
+        </div>
 
-      <div class="card-header">
-        <h4>{{ app.influencerUsername }}</h4>
-        <span 
-          class="badge"
-          [ngClass]="{
-            'bg-warning': app.status === 'PENDING',
-            'bg-success': app.status === 'ACCEPTED',
-            'bg-danger': app.status === 'REJECTED'
-          }">
+        <span class="status-badge" [ngClass]="{
+          'status-pending': app.status === 'PENDING',
+          'status-accepted': app.status === 'ACCEPTED',
+          'status-rejected': app.status === 'REJECTED',
+          'status-shortlisted': app.status === 'SHORTLISTED'
+        }">
           {{ app.status }}
         </span>
       </div>
 
-      <div class="card-body">
-        <p class="mb-2">
-          <strong>Expected Price:</strong> ₹{{ app.expectedPrice | number }}
-        </p>
-
-        <p class="mb-2">
-          <strong>Proposal:</strong>
-        </p>
-        <p class="proposal-text">
-          {{ app.proposal }}
-        </p>
-
-        @if (app.portfolioLink) {
-          <p class="mb-3">
-            <strong>Portfolio:</strong> 
-            <a [href]="app.portfolioLink" target="_blank" rel="noopener noreferrer">
-              View Portfolio
-            </a>
-          </p>
-        }
-
-        @if (app.status === 'PENDING') {
-          <div class="actions">
-            <button 
-              class="btn btn-success btn-sm"
-              (click)="acceptApplication(app.applicationId)">
-              Accept
-            </button>
-            <button 
-              class="btn btn-danger btn-sm"
-              (click)="rejectApplication(app.applicationId)">
-              Reject
-            </button>
-          </div>
-        }
+      <div class="stats-grid">
+        <div>
+          <span>Followers</span>
+          <strong>125K</strong>
+        </div>
+        <div>
+          <span>Engagement</span>
+          <strong>6.8%</strong>
+        </div>
+        <div>
+          <span>Niche</span>
+          <strong>Fashion</strong>
+        </div>
+        <div>
+          <span>Location</span>
+          <strong>Pune</strong>
+        </div>
+        <div>
+          <span>Price / Post</span>
+          <strong>₹{{ app.expectedPrice | number }}</strong>
+        </div>
       </div>
 
-    </div>
-  }
+      <div class="proposal-block">
+        <p class="proposal-label">Application Message</p>
+        <p class="proposal-text">{{ app.proposal }}</p>
+      </div>
 
+      <div class="skills-row">
+        <span class="skill-pill">Instagram</span>
+        <span class="skill-pill">YouTube</span>
+        <span class="skill-pill">Short Videos</span>
+        <span class="skill-pill">Fashion</span>
+        <span class="skill-pill">Lifestyle</span>
+      </div>
+
+      <div class="card-actions">
+        @if (app.status === 'PENDING') {
+          <button class="action-btn accept" type="button" (click)="acceptApplication(app.applicationId)">Accept</button>
+          <button class="action-btn shortlist" type="button">Shortlist</button>
+          <button class="action-btn reject" type="button" (click)="rejectApplication(app.applicationId)">Reject</button>
+        }
+
+        @if (app.portfolioLink) {
+          <a class="secondary-btn" [href]="app.portfolioLink" target="_blank" rel="noopener noreferrer">View Full Profile</a>
+        }
+      </div>
+    </article>
+  }
 </div>

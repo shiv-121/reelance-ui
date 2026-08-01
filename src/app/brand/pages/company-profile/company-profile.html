@@ -1,0 +1,66 @@
+<div class="page-shell">
+  <section class="hero-card">
+    <div class="hero-main">
+      <div class="logo-badge" aria-hidden="true">RS</div>
+      <div>
+        <div class="hero-title-row">
+          <h1>{{ company.companyName }}</h1>
+          <span class="verified-pill">Verified Brand</span>
+        </div>
+        <p class="hero-meta">{{ company.industry }} • {{ company.location }}</p>
+        <a class="website-link" [href]="company.website" target="_blank" rel="noreferrer">
+          {{ company.website }}
+        </a>
+      </div>
+    </div>
+
+    <button class="edit-btn" type="button">Edit Company Profile</button>
+  </section>
+
+  <section class="content-grid">
+    <article class="card about-card">
+      <div class="section-heading">
+        <p class="eyebrow">Overview</p>
+        <h2>About Company</h2>
+      </div>
+      <p class="description">{{ company.description }}</p>
+    </article>
+
+    <article class="card stats-card">
+      <div class="section-heading">
+        <p class="eyebrow">Performance</p>
+        <h2>At a Glance</h2>
+      </div>
+      <div class="stats-grid">
+        @for (stat of stats; track stat.label) {
+          <div class="stat-item">
+            <strong>{{ stat.value }}</strong>
+            <span>{{ stat.label }}</span>
+          </div>
+        }
+      </div>
+    </article>
+  </section>
+
+  <section class="card campaigns-card">
+    <div class="section-heading">
+      <p class="eyebrow">Recent Work</p>
+      <h2>Recent Campaigns</h2>
+    </div>
+
+    <div class="campaign-list">
+      @for (campaign of recentCampaigns; track campaign.name) {
+        <div class="campaign-item">
+          <div>
+            <h3>{{ campaign.name }}</h3>
+            <p>{{ campaign.status }}</p>
+          </div>
+          <div class="campaign-meta">
+            <span>Budget {{ campaign.budget }}</span>
+            <span>Due {{ campaign.deadline }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+</div>

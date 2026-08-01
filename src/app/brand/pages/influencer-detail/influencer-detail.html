@@ -1,107 +1,205 @@
 @if (loading) {
-
-  <p>
-    Loading...
-  </p>
-
+  <div class="loading-state">Loading profile...</div>
 }
 
 @if (!loading && influencer) {
-
   <div class="page">
+    <a routerLink="/brand/influencers" class="back-link">← Back to influencers</a>
 
-    <a
-      routerLink="/brand/influencers"
-      class="back-link">
-
-      ← Back To Influencers
-
-    </a>
-
-    <div class="profile-card">
-
-      <div class="avatar">
-
-        {{
-          influencer.username
-            .charAt(0)
-            .toUpperCase()
-        }}
-
+    <input type="checkbox" id="portfolio-modal-toggle" class="portfolio-modal-toggle" />
+    <label for="portfolio-modal-toggle" class="portfolio-overlay"></label>
+    <div class="portfolio-modal-card">
+      <label for="portfolio-modal-toggle" class="modal-close">×</label>
+      <div class="modal-content">
+        <span class="hero-badge">Portfolio Preview</span>
+        <h3>Premium creator content preview</h3>
+        <p>Placeholder showcase for this creator’s campaign work, visual direction, and brand fit.</p>
       </div>
-
-      <h1>
-
-        {{ influencer.username }}
-
-      </h1>
-
-      <p class="handle">
-
-        {{ influencer.instagramHandle }}
-
-      </p>
-
-      <div class="stats">
-
-        <div class="stat">
-
-          <h3>
-
-            Followers
-
-          </h3>
-
-          <p>
-
-            {{
-              influencer.followers
-            }}
-
-          </p>
-
-        </div>
-
-        <div class="stat">
-
-          <h3>
-
-            Niche
-
-          </h3>
-
-          <p>
-
-            {{
-              influencer.niche
-            }}
-
-          </p>
-
-        </div>
-
-        <div class="stat">
-
-          <h3>
-
-            Price
-
-          </h3>
-
-          <p>
-
-            ₹{{
-              influencer.pricePerPost
-            }}
-
-          </p>
-
-        </div>
-
-      </div>
-
     </div>
 
-  </div>
+    <div class="profile-shell">
+      <div class="main-column">
+        <section class="hero-card">
+          <div class="hero-banner">
+            <div class="hero-banner-overlay"></div>
+            <div class="avatar">
+              {{ influencer.username.charAt(0).toUpperCase() }}
+            </div>
+          </div>
 
+          <div class="hero-content">
+            <div class="hero-intro">
+              <div>
+                <div class="hero-badge">Verified Creator</div>
+                <h1>{{ influencer.username }}</h1>
+                <p class="handle">{{ influencer.instagramHandle }}</p>
+              </div>
+              <div class="hero-actions">
+                <button class="btn btn-primary" type="button">Send Collaboration Request</button>
+                <button class="btn btn-secondary" type="button" disabled>Save Creator</button>
+              </div>
+            </div>
+
+            <div class="hero-meta">
+              <div class="meta-pill">{{ influencer.niche }}</div>
+              <div class="meta-pill">Mumbai, India</div>
+              <div class="meta-pill">120K+ followers</div>
+            </div>
+
+            <div class="hero-stats">
+              <div class="mini-stat">
+                <strong>{{ influencer.followers | number:'1.0-0' }}</strong>
+                <span>Followers</span>
+              </div>
+              <div class="mini-stat">
+                <strong>6.8%</strong>
+                <span>Engagement</span>
+              </div>
+              <div class="mini-stat">
+                <strong>₹{{ influencer.pricePerPost }}</strong>
+                <span>Price / Post</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-card about-card">
+          <div class="section-heading">
+            <h2>About Creator</h2>
+            <p>Profile overview</p>
+          </div>
+          <p class="about-text">
+            Fashion and lifestyle creator focused on premium storytelling, beauty collaborations,
+            and polished short-form content for standout brand campaigns.
+          </p>
+
+          <div class="detail-grid">
+            <div>
+              <h3>Languages</h3>
+              <p>English, Hindi</p>
+            </div>
+            <div>
+              <h3>Location</h3>
+              <p>Mumbai, India</p>
+            </div>
+            <div>
+              <h3>Content Style</h3>
+              <p>Reels, UGC, Lifestyle</p>
+            </div>
+            <div>
+              <h3>Experience</h3>
+              <p>5+ years</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-heading">
+            <h2>Portfolio</h2>
+            <p>Selected highlights</p>
+          </div>
+          <div class="portfolio-grid">
+            <label class="portfolio-item item-one" for="portfolio-modal-toggle">
+              <span>Campaign Reel</span>
+            </label>
+            <label class="portfolio-item item-two" for="portfolio-modal-toggle">
+              <span>Brand Story</span>
+            </label>
+            <label class="portfolio-item item-three" for="portfolio-modal-toggle">
+              <span>Product Launch</span>
+            </label>
+            <label class="portfolio-item item-four" for="portfolio-modal-toggle">
+              <span>Creator Film</span>
+            </label>
+            <label class="portfolio-item item-five" for="portfolio-modal-toggle">
+              <span>Short Form</span>
+            </label>
+            <label class="portfolio-item item-six" for="portfolio-modal-toggle">
+              <span>Beauty Collab</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-heading">
+            <h2>Creator Statistics</h2>
+            <p>Performance snapshot</p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <strong>120K+</strong>
+              <span>Followers</span>
+            </div>
+            <div class="stat-card">
+              <strong>6.8%</strong>
+              <span>Engagement</span>
+            </div>
+            <div class="stat-card">
+              <strong>24</strong>
+              <span>Completed Campaigns</span>
+            </div>
+            <div class="stat-card">
+              <strong>98%</strong>
+              <span>Response Rate</span>
+            </div>
+            <div class="stat-card">
+              <strong>4.9/5</strong>
+              <span>Average Rating</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-heading">
+            <h2>Platforms</h2>
+            <p>Connect across channels</p>
+          </div>
+          <div class="socials">
+            <a href="#" class="social-pill">Instagram</a>
+            <a href="#" class="social-pill">YouTube</a>
+            <a href="#" class="social-pill">TikTok</a>
+            <a href="#" class="social-pill">LinkedIn</a>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-heading">
+            <h2>Recent Collaborations</h2>
+            <p>Brands they’ve worked with</p>
+          </div>
+          <div class="brand-row">
+            <div class="brand-chip">Nike</div>
+            <div class="brand-chip">Adidas</div>
+            <div class="brand-chip">Samsung</div>
+          </div>
+        </section>
+
+        <section class="content-card">
+          <div class="section-heading">
+            <h2>Reviews</h2>
+            <p>What brands say</p>
+          </div>
+          <div class="review-card">
+            <div class="stars">★★★★★</div>
+            <p>“Excellent creator, polished deliverables, and a very thoughtful collaboration experience.”</p>
+            <span>— Brand Lead, Luxe Studio</span>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sidebar-card">
+        <div class="sidebar-top">
+          <span class="sidebar-label">Starting at</span>
+          <h3>₹{{ influencer.pricePerPost }} / post</h3>
+          <p>Average response time: 2 hours</p>
+          <p>Availability: Open for new campaigns</p>
+        </div>
+
+        <div class="sidebar-actions">
+          <button class="btn btn-primary btn-full" type="button">Send Collaboration Request</button>
+          <button class="btn btn-secondary btn-full" type="button" disabled>Message</button>
+        </div>
+      </aside>
+    </div>
+  </div>
 }

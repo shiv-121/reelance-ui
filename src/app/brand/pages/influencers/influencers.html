@@ -1,158 +1,135 @@
 <div class="page">
-<div class="page-header">
+  <section class="hero-card">
+    <div class="hero-copy">
+      <span class="eyebrow">Creator Marketplace</span>
+      <h1>Discover Influencers</h1>
+      <p>Find creators that match your next campaign.</p>
+    </div>
 
-  <span class="page-tag">
+    <div class="hero-actions">
+      <button class="primary-action" type="button" disabled>
+        Invite Creator
+      </button>
+    </div>
+  </section>
 
-    Creator Marketplace
+  <section class="toolbar" role="search">
+    <div class="toolbar-field toolbar-search">
+      <span class="toolbar-icon">🔍</span>
+      <input type="text" placeholder="Search creator..." />
+    </div>
 
-  </span>
+    <div class="toolbar-field">
+      <label>Niche</label>
+      <select>
+        <option value="">All Niches</option>
+        <option value="fashion">Fashion</option>
+        <option value="travel">Travel</option>
+        <option value="gaming">Gaming</option>
+        <option value="lifestyle">Lifestyle</option>
+      </select>
+    </div>
 
-  <h1>
+    <div class="toolbar-field">
+      <label>Followers</label>
+      <select>
+        <option value="">Any Reach</option>
+        <option value="10k">10K+</option>
+        <option value="50k">50K+</option>
+        <option value="100k">100K+</option>
+      </select>
+    </div>
 
-    Discover Creators ✨
+    <div class="toolbar-field">
+      <label>Min Price</label>
+      <input type="number" placeholder="Min Price" [(ngModel)]="minPrice" />
+    </div>
 
-  </h1>
+    <div class="toolbar-field">
+      <label>Max Price</label>
+      <input type="number" placeholder="Max Price" [(ngModel)]="maxPrice" />
+    </div>
 
-  <p>
+    <div class="toolbar-field">
+      <label>Sort</label>
+      <select [(ngModel)]="sort">
+        <option value="pricePerPost,asc">Price Low → High</option>
+        <option value="pricePerPost,desc">Price High → Low</option>
+      </select>
+    </div>
 
-    Find influencers that match your campaign goals and budget.
-
-  </p>
-
-</div>
-
-  <div class="filters">
-
-    <input
-      type="number"
-      placeholder="Min Price"
-      [(ngModel)]="minPrice">
-
-    <input
-      type="number"
-      placeholder="Max Price"
-      [(ngModel)]="maxPrice">
-
-    <select
-      [(ngModel)]="sort">
-
-      <option
-        value="pricePerPost,asc">
-
-        Price Low → High
-
-      </option>
-
-      <option
-        value="pricePerPost,desc">
-
-        Price High → Low
-
-      </option>
-
-    </select>
-
-    <button
-      (click)="loadInfluencers()">
-
+    <button class="toolbar-action" type="button" (click)="loadInfluencers()">
       Apply Filters
-
     </button>
-
-  </div>
-
+  </section>
 
   @if (influencers.length === 0) {
-
     <div class="empty-state">
-
-      <h2>
-        No Influencers Found
-      </h2>
-
-      <p>
-        Try adjusting your filters.
-      </p>
-
+      <div class="empty-illustration">✦</div>
+      <h2>No creators found</h2>
+      <p>Try adjusting your filters.</p>
     </div>
-
   } @else {
-
     <div class="grid">
-
-      @for (
-        influencer of influencers;
-        track influencer.id
-      ) {
-
-        <div class="card">
-
-          <div class="avatar">
-
-            {{
-              influencer.username
-                .charAt(0)
-                .toUpperCase()
-            }}
-
+      @for (influencer of influencers; track influencer.id) {
+        <article class="creator-card">
+          <div class="card-visual">
+            <div class="card-glow"></div>
+            <div class="avatar">
+              {{ influencer.username.charAt(0).toUpperCase() }}
+            </div>
           </div>
 
-          <h3>
+          <div class="card-body">
+            <div class="creator-head">
+              <div>
+                <h3>{{ influencer.username }}</h3>
+                <p class="handle">{{ influencer.instagramHandle }}</p>
+              </div>
+              <span class="verified">✓</span>
+            </div>
 
-            {{ influencer.username }}
+            <span class="niche-pill">{{ influencer.niche }}</span>
 
-          </h3>
+            <div class="stats-row">
+              <div>
+                <strong>{{ influencer.followers | number:'1.0-0' }}</strong>
+                <span>Followers</span>
+              </div>
+              <div>
+                <strong>6.8%</strong>
+                <span>Engagement</span>
+              </div>
+              <div>
+                <strong>₹{{ influencer.pricePerPost }}</strong>
+                <span>Price/Post</span>
+              </div>
+            </div>
 
-          <p class="handle">
+            <div class="platforms">
+              <span>Instagram</span>
+              <span>YouTube</span>
+              <span>TikTok</span>
+            </div>
 
-            {{ influencer.instagramHandle }}
+            <p class="bio">
+              Fashion creator focused on premium lifestyle reels and beauty collaborations.
+            </p>
 
-          </p>
-
-          <div class="badge-row">
-
-            <span class="badge niche">
-
-              {{ influencer.niche }}
-
-            </span>
-
-            <span class="badge followers">
-
-              {{ influencer.followers }}
-              followers
-
-            </span>
-
+            <div class="card-actions">
+              <a
+                class="btn btn-primary"
+                [routerLink]="['/brand/influencers', influencer.id]"
+              >
+                View Profile
+              </a>
+              <button class="btn btn-secondary" type="button" disabled>
+                Invite
+              </button>
+            </div>
           </div>
-
-          <div class="price">
-
-            ₹{{ influencer.pricePerPost }}
-
-            <span>
-              / post
-            </span>
-
-          </div>
-
-          <a
-            class="profile-link"
-            [routerLink]="[
-              '/brand/influencers',
-              influencer.id
-            ]">
-
-            View Profile
-
-          </a>
-
-        </div>
-
+        </article>
       }
-
     </div>
-
   }
-
 </div>

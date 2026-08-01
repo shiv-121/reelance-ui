@@ -70,6 +70,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'brand/profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./brand/pages/company-profile/company-profile')
+        .then(m => m.CompanyProfile)
+  },
+
+  {
     path: 'influencer',
     redirectTo: 'influencer/dashboard',
     pathMatch: 'full'

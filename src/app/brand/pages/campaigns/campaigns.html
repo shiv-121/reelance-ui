@@ -1,182 +1,205 @@
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>My Campaigns</h1>
-    <button 
-      class="btn btn-primary" 
-      (click)="toggleCreateForm()"
-      [disabled]="loading">
+<div class="workspace-shell">
+  <section class="hero-card">
+    <div>
+      <p class="eyebrow">Campaign Workspace</p>
+      <h1>Manage all your influencer campaigns from one place.</h1>
+      <p class="hero-description">Keep launches, creator applications, and campaign progress aligned in a single workspace.</p>
+    </div>
+
+    <button class="primary-btn" type="button" (click)="toggleCreateForm()" [disabled]="loading">
       + Create Campaign
     </button>
-  </div>
+  </section>
 
   @if (error) {
-    <div class="alert alert-danger" role="alert">
+    <div class="alert-card" role="alert">
       {{ error }}
     </div>
   }
 
   @if (loading) {
-    <div class="text-center">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
+    <div class="loading-card">
+      <div class="spinner" role="status"></div>
+      <p>Loading campaigns...</p>
     </div>
   }
 
   @if (showCreateForm) {
-    <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">Create New Campaign</h5>
-        <form (ngSubmit)="submitCreateCampaign()">
-          <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input 
-              type="text" 
-              class="form-control" 
-              id="title"
-              [(ngModel)]="createForm.title"
-              name="title"
-              required>
-          </div>
-
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea 
-              class="form-control" 
-              id="description"
-              rows="3"
-              [(ngModel)]="createForm.description"
-              name="description"
-              required></textarea>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="budget" class="form-label">Budget (₹)</label>
-                <input 
-                  type="number" 
-                  class="form-control" 
-                  id="budget"
-                  [(ngModel)]="createForm.budget"
-                  name="budget"
-                  required>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="mb-3">
-                <label for="niche" class="form-label">Niche</label>
-                <input 
-                  type="text" 
-                  class="form-control" 
-                  id="niche"
-                  [(ngModel)]="createForm.niche"
-                  name="niche"
-                  required>
-              </div>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="deadline" class="form-label">Deadline</label>
-            <input 
-              type="date" 
-              class="form-control" 
-              id="deadline"
-              [(ngModel)]="createForm.deadline"
-              name="deadline"
-              required>
-          </div>
-
-          <div class="d-flex gap-2">
-            <button 
-              type="submit" 
-              class="btn btn-success"
-              [disabled]="loading || !isFormValid()">
-              Submit
-            </button>
-            <button 
-              type="button" 
-              class="btn btn-secondary"
-              (click)="toggleCreateForm()"
-              [disabled]="loading">
-              Cancel
-            </button>
-          </div>
-        </form>
+    <section class="panel-card create-card">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">New Campaign</p>
+          <h2>Create Campaign</h2>
+        </div>
       </div>
-    </div>
+
+      <form (ngSubmit)="submitCreateCampaign()">
+        <div class="form-grid">
+          <label class="field">
+            <span>Title</span>
+            <input type="text" [(ngModel)]="createForm.title" name="title" required>
+          </label>
+
+          <label class="field">
+            <span>Description</span>
+            <textarea rows="3" [(ngModel)]="createForm.description" name="description" required></textarea>
+          </label>
+
+          <label class="field">
+            <span>Budget (₹)</span>
+            <input type="number" [(ngModel)]="createForm.budget" name="budget" required>
+          </label>
+
+          <label class="field">
+            <span>Niche</span>
+            <input type="text" [(ngModel)]="createForm.niche" name="niche" required>
+          </label>
+
+          <label class="field full-width">
+            <span>Deadline</span>
+            <input type="date" [(ngModel)]="createForm.deadline" name="deadline" required>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="primary-btn" [disabled]="loading || !isFormValid()">Submit</button>
+          <button type="button" class="secondary-btn" (click)="toggleCreateForm()" [disabled]="loading">Cancel</button>
+        </div>
+      </form>
+    </section>
   }
 
-  <div class="row">
-    @for (campaign of campaigns; track campaign.campaignId) {
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ campaign.title }}</h5>
-            <p class="card-text">{{ campaign.description }}</p>
-            
-            <div class="mb-3">
-              <p class="mb-1"><strong>Budget:</strong> ₹{{ campaign.budget | number }}</p>
-              <p class="mb-1"><strong>Niche:</strong> {{ campaign.niche }}</p>
-              <p class="mb-1"><strong>Deadline:</strong> {{ campaign.deadline }}</p>
-              <p class="mb-1">
-                <strong>Status:</strong> 
-                <span 
-                  class="badge"
-                  [ngClass]="{
-                    'bg-success': campaign.status === 'OPEN',
-                    'bg-secondary': campaign.status === 'CLOSED',
-                    'bg-info': campaign.status === 'COMPLETED'
-                  }">
-                  {{ campaign.status }}
-                </span>
-              </p>
-            </div>
-
-            <div class="d-flex gap-2">
-              @if (campaign.status === 'OPEN') {
-                <button 
-                  class="btn btn-warning btn-sm"
-                  (click)="closeCampaign(campaign.campaignId)"
-                  [disabled]="loading">
-                  Close
-                </button>
-              }
-              
-              @if (campaign.status !== 'COMPLETED') {
-                <button 
-                  class="btn btn-info btn-sm"
-                  (click)="completeCampaign(campaign.campaignId)"
-                  [disabled]="loading">
-                  Complete
-                </button>
-              }
-
-              <a
-                [routerLink]="['/brand/campaigns', campaign.campaignId, 'applications']"
-                class="btn btn-primary btn-sm">
-                View Applications
-              </a>
-
-              <a
-                [routerLink]="['/brand/campaigns', campaign.campaignId, 'participants']"
-                class="btn btn-success btn-sm">
-                Participants
-              </a>
-            </div>
-          </div>
-        </div>
+  <section class="summary-grid">
+    <article class="summary-card">
+      <div class="summary-icon">🚀</div>
+      <div>
+        <p>Active Campaigns</p>
+        <strong>4</strong>
+        <span>Live launches</span>
       </div>
-    } @empty {
-      @if (!loading) {
-        <div class="col-12">
-          <div class="alert alert-info" role="alert">
-            No campaigns yet. <a href="#" (click)="toggleCreateForm()">Create one now!</a>
+    </article>
+    <article class="summary-card">
+      <div class="summary-icon">🏁</div>
+      <div>
+        <p>Completed Campaigns</p>
+        <strong>12</strong>
+        <span>Finished work</span>
+      </div>
+    </article>
+    <article class="summary-card">
+      <div class="summary-icon">📬</div>
+      <div>
+        <p>Applications Received</p>
+        <strong>28</strong>
+        <span>Waiting for review</span>
+      </div>
+    </article>
+    <article class="summary-card">
+      <div class="summary-icon">💸</div>
+      <div>
+        <p>Total Budget</p>
+        <strong>₹1.2L</strong>
+        <span>Across active campaigns</span>
+      </div>
+    </article>
+  </section>
+
+  <section class="filters-card">
+    <div class="filter-chips">
+      <button class="chip active" type="button">All</button>
+      <button class="chip" type="button">Open</button>
+      <button class="chip" type="button">Completed</button>
+      <button class="chip" type="button">Closed</button>
+    </div>
+
+    <div class="filter-controls">
+      <label class="search-field">
+        <input type="text" placeholder="Search campaign...">
+      </label>
+
+      <label class="search-field compact-select">
+        <select>
+          <option>Status</option>
+          <option>All</option>
+          <option>Open</option>
+          <option>Completed</option>
+          <option>Closed</option>
+        </select>
+      </label>
+
+      <label class="search-field compact-select">
+        <select>
+          <option>Sort</option>
+          <option>Newest</option>
+          <option>Oldest</option>
+          <option>Budget</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  @if (!loading && campaigns.length === 0) {
+    <section class="empty-state">
+      <div class="empty-icon">✨</div>
+      <h3>No campaigns created yet</h3>
+      <p>Create your first campaign and start collaborating with creators.</p>
+      <button class="primary-btn" type="button" (click)="toggleCreateForm()">Create Campaign</button>
+    </section>
+  } @else {
+    <section class="campaign-grid">
+      @for (campaign of campaigns; track campaign.campaignId) {
+        <article class="campaign-card">
+          <div class="campaign-head">
+            <div>
+              <h3>{{ campaign.title }}</h3>
+              <p>{{ campaign.description }}</p>
+            </div>
+            <span class="status-badge" [ngClass]="{
+              'status-open': campaign.status === 'OPEN',
+              'status-closed': campaign.status === 'CLOSED',
+              'status-completed': campaign.status === 'COMPLETED'
+            }">
+              {{ campaign.status }}
+            </span>
           </div>
-        </div>
+
+          <div class="campaign-meta">
+            <div>
+              <span>Budget</span>
+              <strong>₹{{ campaign.budget | number }}</strong>
+            </div>
+            <div>
+              <span>Deadline</span>
+              <strong>{{ campaign.deadline }}</strong>
+            </div>
+            <div>
+              <span>Applications</span>
+              <strong>12</strong>
+            </div>
+          </div>
+
+          <div class="campaign-footer">
+            <div class="pill-row">
+              <span class="pill">{{ campaign.niche }}</span>
+            </div>
+
+            <div class="card-actions">
+              @if (campaign.status === 'OPEN') {
+                <button class="secondary-btn small" type="button" (click)="closeCampaign(campaign.campaignId)" [disabled]="loading">Close</button>
+              }
+
+              @if (campaign.status !== 'COMPLETED') {
+                <button class="secondary-btn small" type="button" (click)="completeCampaign(campaign.campaignId)" [disabled]="loading">Complete</button>
+              }
+
+              <a class="primary-btn small" [routerLink]="['/brand/campaigns', campaign.campaignId, 'applications']">View Applications</a>
+              <a class="secondary-btn small" [routerLink]="['/brand/campaigns', campaign.campaignId, 'participants']">Edit Campaign</a>
+              <button class="secondary-btn small" type="button" disabled>Analytics</button>
+            </div>
+          </div>
+        </article>
       }
-    }
-  </div>
+    </section>
+  }
 </div>
 
