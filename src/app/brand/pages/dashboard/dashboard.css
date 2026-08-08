@@ -151,11 +151,11 @@
 }
 
 .collab-section {
-  background: #ffffff;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
   border: 1px solid #e2e8f0;
   border-radius: 24px;
-  padding: 1.5rem;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+  padding: 1.25rem;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.05);
 }
 
 .section-heading {
@@ -169,23 +169,39 @@
 
 .collab-list {
   display: grid;
-  gap: 1rem;
+  gap: 0.65rem;
 }
 
 .collab-card {
-  padding: 1rem 1.1rem;
+  padding: 0.9rem 1rem;
+  background: #ffffff;
+  border: 1px solid #e8eef7;
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.035);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.collab-card:hover {
+  transform: translateY(-2px);
+  border-color: #bfdbfe;
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.08);
 }
 
 .collab-top {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .collab-card h3 {
-  margin: 0 0 0.3rem;
-  font-size: 1rem;
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
 }
 
 .collab-preview {
@@ -197,11 +213,14 @@
 .status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 0.7rem;
+  justify-content: center;
+  padding: 0.3rem 0.65rem;
   border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 700;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .status-pending {
@@ -223,14 +242,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 1rem;
-  padding-top: 0.9rem;
+  margin-top: 0.7rem;
+  padding-top: 0.65rem;
   border-top: 1px solid #f1f5f9;
 }
 
 .collab-id {
   color: #64748b;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
 }
 
 .ghost-btn {
@@ -264,6 +283,11 @@
   .quick-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .overview-grid {
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  }
 }
 
 @media (max-width: 640px) {
@@ -282,5 +306,179 @@
   .quick-actions {
     grid-template-columns: 1fr;
   }
+
+  .overview-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .campaign-summary {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .campaign-deadline,
+
+  .application-footer {
+
+    flex-wrap: wrap;
+
+  }
 }
+
+/* Campaign overview */
+
+.overview-section {
+  margin-bottom: 1.5rem;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.overview-item {
+  padding: 1rem;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+}
+
+.overview-item span {
+  display: block;
+  color: #64748b;
+  font-size: 0.82rem;
+  margin-bottom: 0.35rem;
+}
+
+.overview-item strong {
+  display: block;
+  color: #0f172a;
+  font-size: 1.2rem;
+}
+
+
+/* Campaign cards */
+
+.campaign-dashboard-card {
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.campaign-dashboard-card:hover {
+  transform: translateY(-3px);
+  border-color: #bfdbfe;
+  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+}
+
+.campaign-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.65rem 0;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+}
+.campaign-summary div {
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0 0.75rem;
+
+}
+
+.campaign-summary strong {
+
+  color: #0f172a;
+  font-size: 0.9rem;
+
+}
+
+.campaign-summary span {
+
+  color: #64748b;
+  font-size: 0.72rem;
+
+}
+
+.campaign-deadline {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.days-left {
+  color: #166534;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.overdue-label {
+  color: #b91c1c;
+  background: #fef2f2;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+
+/* Links */
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.section-link:hover {
+  text-decoration: underline;
+}
+
+.campaign-link {
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.campaign-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.application-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.creator-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.creator-link:hover {
+  text-decoration: underline;
+}
+
+
 
