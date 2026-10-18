@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Campaign } from '../models/campaign';
 import { CampaignWorkspaceResponse } from '../models/campaign-page-response';
 import { CreateCampaignRequest } from '../models/create-campaign-request';
-import { Application } from '../models/application';
+import { Application, ApplicationStatus } from '../models/application';
 import { Participant } from '../models/participant';
 
 @Injectable({
@@ -68,12 +68,23 @@ export class CampaignService {
     return this.http.get<Application[]>(`http://localhost:8080/api/campaign-applications/campaign/${campaignId}`);
   }
 
-  acceptApplication(applicationId: number): Observable<any> {
-    return this.http.patch(`http://localhost:8080/api/campaign-applications/${applicationId}?status=ACCEPTED`, {});
+  updateApplicationStatus(applicationId: number, status: ApplicationStatus): Observable<Application> {
+    return this.http.patch<Application>(
+      `http://localhost:8080/api/campaign-applications/${applicationId}?status=${status}`,
+      {}
+    );
   }
 
-  rejectApplication(applicationId: number): Observable<any> {
-    return this.http.patch(`http://localhost:8080/api/campaign-applications/${applicationId}?status=REJECTED`, {});
+  shortlistApplication(applicationId: number): Observable<Application> {
+    return this.updateApplicationStatus(applicationId, 'SHORTLISTED');
+  }
+
+  acceptApplication(applicationId: number): Observable<Application> {
+    return this.updateApplicationStatus(applicationId, 'ACCEPTED');
+  }
+
+  rejectApplication(applicationId: number): Observable<Application> {
+    return this.updateApplicationStatus(applicationId, 'REJECTED');
   }
 
   getCampaignParticipants(campaignId: number): Observable<Participant[]> {

@@ -13,28 +13,45 @@
   </div>
 
   @if (successMessage) {
-    <div class="success-pill" role="alert">
+    <div class="success-pill" role="status">
       {{ successMessage }}
+    </div>
+  }
+  @if (errorMessage) {
+    <div class="error-pill" role="alert">
+      {{ errorMessage }}
     </div>
   }
 
   <section class="toolbar">
-    <div class="tabs">
-      <button class="tab active" type="button">All <span>({{ applications.length }})</span></button>
-      <button class="tab" type="button">Pending <span>(12)</span></button>
-      <button class="tab" type="button">Shortlisted <span>(4)</span></button>
-      <button class="tab" type="button">Accepted <span>(5)</span></button>
-      <button class="tab" type="button">Rejected <span>(3)</span></button>
+    <div class="tabs" role="tablist" aria-label="Filter applications by status">
+      @for (tab of statusTabs; track tab.status) {
+        <button
+          class="tab"
+          [class.active]="selectedStatus === tab.status"
+          [attr.aria-pressed]="selectedStatus === tab.status"
+          type="button"
+          (click)="selectedStatus = tab.status">
+          {{ tab.label }} <span>({{ countForStatus(tab.status) }})</span>
+        </button>
+      }
     </div>
 
     <div class="toolbar-actions">
-      <input class="search-input" type="text" placeholder="Search creator...">
-      <select class="sort-select">
+      <input
+        class="search-input"
+        type="search"
+        placeholder="Search creator..."
+        aria-label="Search creators by username or portfolio link"
+        [value]="searchTerm"
+        (input)="searchTerm = $any($event.target).value">
+      <select class="sort-select" aria-describedby="sort-help" disabled>
         <option>Newest</option>
         <option>Oldest</option>
       </select>
     </div>
   </section>
+  <p class="sort-help" id="sort-help">Sorting is unavailable because the application response does not include a creation timestamp.</p>
 
   @if (loading) {
     <div class="loading-card">
@@ -43,15 +60,15 @@
     </div>
   }
 
-  @if (!loading && applications.length === 0) {
+  @if (!loading && !errorMessage && filteredApplications.length === 0) {
     <div class="empty-state">
       <div class="empty-icon">✨</div>
-      <h3>No creator applications yet</h3>
-      <p>Applications from creators will appear here.</p>
+      <h3>{{ applications.length === 0 ? 'No creator applications yet' : 'No applications match these filters' }}</h3>
+      <p>{{ applications.length === 0 ? 'Applications from creators will appear here.' : 'Try another status or creator search.' }}</p>
     </div>
   }
 
-  @for (app of applications; track app.applicationId) {
+  @for (app of filteredApplications; track app.applicationId) {
     <article class="application-card">
       <div class="card-top">
         <div class="creator-meta">
@@ -59,10 +76,8 @@
           <div>
             <div class="creator-name-row">
               <h3>{{ app.influencerUsername }}</h3>
-              <span class="verified-pill">Verified</span>
             </div>
-            <p class="creator-handle">@{{ app.influencerUsername.toLowerCase() }}</p>
-            <p class="creator-meta-text">Applied 2 hours ago</p>
+            <p class="creator-meta-text">{{ app.campaignTitle }}</p>
           </div>
         </div>
 
@@ -78,22 +93,6 @@
 
       <div class="stats-grid">
         <div>
-          <span>Followers</span>
-          <strong>125K</strong>
-        </div>
-        <div>
-          <span>Engagement</span>
-          <strong>6.8%</strong>
-        </div>
-        <div>
-          <span>Niche</span>
-          <strong>Fashion</strong>
-        </div>
-        <div>
-          <span>Location</span>
-          <strong>Pune</strong>
-        </div>
-        <div>
           <span>Price / Post</span>
           <strong>₹{{ app.expectedPrice | number }}</strong>
         </div>
@@ -104,19 +103,16 @@
         <p class="proposal-text">{{ app.proposal }}</p>
       </div>
 
-      <div class="skills-row">
-        <span class="skill-pill">Instagram</span>
-        <span class="skill-pill">YouTube</span>
-        <span class="skill-pill">Short Videos</span>
-        <span class="skill-pill">Fashion</span>
-        <span class="skill-pill">Lifestyle</span>
-      </div>
-
       <div class="card-actions">
-        @if (app.status === 'PENDING') {
-          <button class="action-btn accept" type="button" (click)="acceptApplication(app.applicationId)">Accept</button>
-          <button class="action-btn shortlist" type="button">Shortlist</button>
-          <button class="action-btn reject" type="button" (click)="rejectApplication(app.applicationId)">Reject</button>
+        @if (app.status === 'PENDING' || app.status === 'SHORTLISTED') {
+          @if (app.status === 'PENDING') {
+            <button class="action-btn shortlist" type="button" [disabled]="isUpdating(app.applicationId)" (click)="shortlistApplication(app.applicationId)">Shortlist</button>
+          }
+          <button class="action-btn accept" type="button" [disabled]="isUpdating(app.applicationId)" (click)="acceptApplication(app.applicationId)">Accept</button>
+          <button class="action-btn reject" type="button" [disabled]="isUpdating(app.applicationId)" (click)="rejectApplication(app.applicationId)">Reject</button>
+          @if (isUpdating(app.applicationId)) {
+            <span class="action-progress" role="status">Updating…</span>
+          }
         }
 
         @if (app.portfolioLink) {

@@ -14,10 +14,17 @@ describe('Dashboard', () => {
     dashboardService = jasmine.createSpyObj('BrandDashboardService', ['getDashboard']);
 
     const mockResponse: BrandDashboardResponse = {
+      totalCampaigns: 3,
       activeCampaigns: 3,
+      completedCampaigns: 0,
+      closedCampaigns: 0,
+      totalApplications: 6,
       pendingApplications: 4,
       acceptedApplications: 2,
+      rejectedApplications: 0,
       totalBudget: 125000,
+      acceptanceRate: 0,
+      completionRate: 0,
       recentCampaigns: [],
       recentApplications: []
     };

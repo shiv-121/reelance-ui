@@ -1,3 +1,5 @@
+export type ApplicationStatus = 'PENDING' | 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED';
+
 export interface Application {
   applicationId: number;
   campaignId: number;
@@ -6,5 +8,5 @@ export interface Application {
   proposal: string;
   expectedPrice: number;
   portfolioLink?: string;
-  status: string;
+  status: ApplicationStatus;
 }
