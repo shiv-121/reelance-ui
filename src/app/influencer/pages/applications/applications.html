@@ -28,24 +28,94 @@
               </div>
               <span 
                 class="badge"
-                [ngClass]="getStatusBadgeClass(application.status)">
-                <i [ngClass]="'bi ' + getStatusIcon(application.status)" class="me-1"></i>
-                {{ application.status }}
+                [ngClass]="getStatusBadgeClass(application.applicationStatus || application.status)">
+                <i [ngClass]="'bi ' + getStatusIcon(application.applicationStatus || application.status)" class="me-1"></i>
+                {{ application.applicationStatus || application.status }}
               </span>
             </div>
 
             <div class="application-info mb-3">
               <div class="info-row">
-                <strong>Expected Price:</strong>
-                <span class="badge bg-info">₹{{ application.expectedPrice | number }}</span>
+                <strong>Original expected price:</strong>
+                @if (application.originalExpectedPrice != null || application.expectedPrice != null) {
+                  <span class="badge bg-info">₹{{ (application.originalExpectedPrice ?? application.expectedPrice) | number }}</span>
+                } @else {
+                  <span>Not provided</span>
+                }
               </div>
+              @if (application.currentOfferPrice != null) {
+                <div class="info-row">
+                  <strong>Current offer:</strong>
+                  <span class="badge bg-primary">₹{{ application.currentOfferPrice | number }}</span>
+                </div>
+              }
+              @if (application.finalAgreedPrice != null) {
+                <div class="info-row">
+                  <strong>Final agreed price:</strong>
+                  <span class="badge bg-success">₹{{ application.finalAgreedPrice | number }}</span>
+                </div>
+              }
               <div class="info-row">
-                <strong>Status:</strong>
-                <span [ngClass]="'status-text status-' + application.status.toLowerCase()">
-                  {{ application.status }}
+                <strong>Application status:</strong>
+                <span [ngClass]="'status-text status-' + (application.applicationStatus || application.status).toLowerCase()">
+                  {{ application.applicationStatus || application.status }}
                 </span>
               </div>
             </div>
+
+            <section class="negotiation-panel" aria-label="Price negotiation">
+              <div class="negotiation-heading">
+                <h6>Price negotiation</h6>
+                <span class="negotiation-status" [ngClass]="{
+                  'negotiation-agreed': application.negotiationStatus === 'AGREED',
+                  'negotiation-declined': application.negotiationStatus === 'DECLINED'
+                }">{{ application.negotiationStatus || 'NOT STARTED' }}</span>
+              </div>
+
+              @if (negotiationActions(application).waitingForInfluencer) {
+                <p class="negotiation-next">Your response is needed for the brand’s offer.</p>
+              } @else if (negotiationActions(application).waitingForBrand) {
+                <p class="negotiation-next">Waiting for the brand to respond to your offer.</p>
+              } @else if (negotiationActions(application).negotiationComplete) {
+                <p class="negotiation-next">Negotiation is complete. Application status remains {{ application.applicationStatus || application.status }}.</p>
+              } @else if (negotiationActions(application).isTerminal) {
+                <p class="negotiation-next">Application status is {{ application.applicationStatus || application.status }}; negotiation actions are unavailable.</p>
+              } @else {
+                <p class="negotiation-next">No negotiation has started.</p>
+              }
+
+              @if (negotiationActions(application).canInfluencerRespond) {
+                <div class="counteroffer-entry">
+                  <label [for]="'influencer-offer-' + application.applicationId">Your counteroffer amount</label>
+                  <div class="counteroffer-controls">
+                    <input
+                      [id]="'influencer-offer-' + application.applicationId"
+                      type="number"
+                      min="0.01"
+                      step="0.01"
+                      required
+                      inputmode="decimal"
+                      [value]="counterOfferAmounts[application.applicationId] || ''"
+                      (input)="counterOfferAmounts[application.applicationId] = $any($event.target).value; negotiationErrors[application.applicationId] = ''"
+                      [disabled]="isNegotiationBusy(application.applicationId)"
+                      aria-label="Counteroffer amount">
+                    <button class="btn btn-outline-primary" type="button" [disabled]="isNegotiationBusy(application.applicationId)" (click)="submitCounterOffer(application)">
+                      {{ isNegotiationBusy(application.applicationId) ? 'Submitting…' : 'Submit counteroffer' }}
+                    </button>
+                  </div>
+                  <div class="negotiation-actions">
+                    <button class="btn btn-success" type="button" [disabled]="isNegotiationBusy(application.applicationId)" (click)="acceptBrandOffer(application)">Accept offer</button>
+                    <button class="btn btn-outline-danger" type="button" [disabled]="isNegotiationBusy(application.applicationId)" (click)="rejectBrandOffer(application)">Reject offer</button>
+                  </div>
+                </div>
+              }
+              @if (negotiationErrors[application.applicationId]) {
+                <p class="negotiation-error" role="alert">{{ negotiationErrors[application.applicationId] }}</p>
+              }
+              @if (negotiationMessages[application.applicationId]) {
+                <p class="negotiation-success" role="status">{{ negotiationMessages[application.applicationId] }}</p>
+              }
+            </section>
 
             <div class="proposal-section">
               <strong>Your Proposal:</strong>

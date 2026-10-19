@@ -1,6 +1,14 @@
-export type ApplicationStatus = 'PENDING' | 'SHORTLISTED' | 'ACCEPTED' | 'REJECTED';
+import {
+  ApplicationStatus,
+  CampaignApplicationResponse,
+  NegotiationParty,
+  NegotiationStatus
+} from '../../core/models/campaign-application-response';
 
-export interface Application {
+export type { ApplicationStatus } from '../../core/models/campaign-application-response';
+
+export interface Application extends Pick<CampaignApplicationResponse,
+  'currentOfferPrice' | 'finalAgreedPrice' | 'negotiationStatus' | 'nextResponseParty'> {
   applicationId: number;
   campaignId: number;
   campaignTitle: string;
@@ -9,4 +17,10 @@ export interface Application {
   expectedPrice: number;
   portfolioLink?: string;
   status: ApplicationStatus;
+  applicationStatus?: ApplicationStatus | null;
+  nextResponseParty?: NegotiationParty | null;
+  negotiationStatus?: NegotiationStatus | null;
+  originalExpectedPrice?: number | null;
+  currentOfferPrice?: number | null;
+  finalAgreedPrice?: number | null;
 }

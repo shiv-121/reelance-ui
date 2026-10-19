@@ -16,6 +16,89 @@
   border-radius: 6px;
 }
 
+.negotiation-panel {
+  padding: 12px;
+  margin-bottom: 1rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.negotiation-heading,
+.counteroffer-controls,
+.negotiation-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.negotiation-heading h6 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.negotiation-status {
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.negotiation-status.negotiation-agreed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.negotiation-status.negotiation-declined {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.negotiation-next {
+  margin: 0.65rem 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.counteroffer-entry label {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.counteroffer-controls input {
+  width: min(100%, 190px);
+  min-height: 38px;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+}
+
+.negotiation-actions {
+  justify-content: flex-start;
+  margin-top: 0.6rem;
+}
+
+.negotiation-error,
+.negotiation-success {
+  margin: 0.6rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.negotiation-error {
+  color: #b91c1c;
+}
+
+.negotiation-success {
+  color: #166534;
+}
+
 .info-row {
   display: flex;
   justify-content: space-between;
@@ -78,4 +161,16 @@
 
 .alert a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 575.98px) {
+  .counteroffer-controls,
+  .negotiation-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .counteroffer-controls input {
+    width: 100%;
+  }
 }

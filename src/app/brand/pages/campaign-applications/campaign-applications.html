@@ -82,21 +82,93 @@
         </div>
 
         <span class="status-badge" [ngClass]="{
-          'status-pending': app.status === 'PENDING',
-          'status-accepted': app.status === 'ACCEPTED',
-          'status-rejected': app.status === 'REJECTED',
-          'status-shortlisted': app.status === 'SHORTLISTED'
+          'status-pending': (app.applicationStatus || app.status) === 'PENDING',
+          'status-accepted': (app.applicationStatus || app.status) === 'ACCEPTED',
+          'status-rejected': (app.applicationStatus || app.status) === 'REJECTED',
+          'status-shortlisted': (app.applicationStatus || app.status) === 'SHORTLISTED'
         }">
-          {{ app.status }}
+          {{ app.applicationStatus || app.status }}
         </span>
       </div>
 
       <div class="stats-grid">
         <div>
-          <span>Price / Post</span>
-          <strong>₹{{ app.expectedPrice | number }}</strong>
+          <span>Original expected price</span>
+          @if (app.originalExpectedPrice != null || app.expectedPrice != null) {
+            <strong>₹{{ (app.originalExpectedPrice ?? app.expectedPrice) | number }}</strong>
+          } @else {
+            <strong>Not provided</strong>
+          }
         </div>
+        @if (app.currentOfferPrice != null) {
+          <div>
+            <span>Current offer</span>
+            <strong>₹{{ app.currentOfferPrice | number }}</strong>
+          </div>
+        }
+        @if (app.finalAgreedPrice != null) {
+          <div>
+            <span>Final agreed price</span>
+            <strong>₹{{ app.finalAgreedPrice | number }}</strong>
+          </div>
+        }
       </div>
+
+      <section class="negotiation-panel" aria-label="Price negotiation">
+        <div class="negotiation-heading">
+          <h4>Price negotiation</h4>
+          <span class="negotiation-status" [ngClass]="{
+            'negotiation-agreed': app.negotiationStatus === 'AGREED',
+            'negotiation-declined': app.negotiationStatus === 'DECLINED'
+          }">{{ app.negotiationStatus || 'NOT STARTED' }}</span>
+        </div>
+
+        @if (negotiationActions(app).waitingForBrand) {
+          <p class="negotiation-next">Awaiting brand response to the influencer’s offer.</p>
+        } @else if (negotiationActions(app).waitingForInfluencer) {
+          <p class="negotiation-next">Awaiting influencer response to the brand’s offer.</p>
+        } @else if (negotiationActions(app).negotiationComplete) {
+          <p class="negotiation-next">Negotiation is complete. Application status remains {{ app.applicationStatus || app.status }}.</p>
+        } @else if (negotiationActions(app).isTerminal) {
+          <p class="negotiation-next">Application status is {{ app.applicationStatus || app.status }}; negotiation actions are unavailable.</p>
+        } @else {
+          <p class="negotiation-next">No negotiation has started.</p>
+        }
+
+        @if (negotiationActions(app).canStart || negotiationActions(app).canBrandRespond) {
+          <div class="counteroffer-entry">
+            <label [for]="'brand-offer-' + app.applicationId">{{ negotiationActions(app).canStart ? 'Your counteroffer amount' : 'Your next counteroffer amount' }}</label>
+            <div class="counteroffer-controls">
+              <input
+                [id]="'brand-offer-' + app.applicationId"
+                type="number"
+                min="0.01"
+                step="0.01"
+                required
+                inputmode="decimal"
+                [value]="counterOfferAmounts[app.applicationId] || ''"
+                (input)="counterOfferAmounts[app.applicationId] = $any($event.target).value; negotiationErrors[app.applicationId] = ''"
+                [disabled]="isNegotiationBusy(app.applicationId)"
+                aria-label="Counteroffer amount">
+              <button class="action-btn shortlist" type="button" [disabled]="isNegotiationBusy(app.applicationId)" (click)="submitBrandCounterOffer(app)">
+                {{ isNegotiationBusy(app.applicationId) ? 'Submitting…' : 'Submit counteroffer' }}
+              </button>
+            </div>
+            @if (negotiationActions(app).canBrandRespond) {
+              <div class="counteroffer-controls response-actions">
+                <button class="action-btn accept" type="button" [disabled]="isNegotiationBusy(app.applicationId)" (click)="acceptInfluencerCounter(app)">Accept influencer offer</button>
+                <button class="action-btn reject" type="button" [disabled]="isNegotiationBusy(app.applicationId)" (click)="rejectInfluencerCounter(app)">Reject influencer offer</button>
+              </div>
+            }
+          </div>
+        }
+        @if (negotiationErrors[app.applicationId]) {
+          <p class="negotiation-error" role="alert">{{ negotiationErrors[app.applicationId] }}</p>
+        }
+        @if (negotiationMessages[app.applicationId]) {
+          <p class="negotiation-success" role="status">{{ negotiationMessages[app.applicationId] }}</p>
+        }
+      </section>
 
       <div class="proposal-block">
         <p class="proposal-label">Application Message</p>
@@ -104,12 +176,12 @@
       </div>
 
       <div class="card-actions">
-        @if (app.status === 'PENDING' || app.status === 'SHORTLISTED') {
-          @if (app.status === 'PENDING') {
-            <button class="action-btn shortlist" type="button" [disabled]="isUpdating(app.applicationId)" (click)="shortlistApplication(app.applicationId)">Shortlist</button>
+        @if ((app.applicationStatus || app.status) === 'PENDING' || (app.applicationStatus || app.status) === 'SHORTLISTED') {
+          @if ((app.applicationStatus || app.status) === 'PENDING') {
+            <button class="action-btn shortlist" type="button" [disabled]="isUpdating(app.applicationId) || isNegotiationBusy(app.applicationId)" (click)="shortlistApplication(app.applicationId)">Shortlist</button>
           }
-          <button class="action-btn accept" type="button" [disabled]="isUpdating(app.applicationId)" (click)="acceptApplication(app.applicationId)">Accept</button>
-          <button class="action-btn reject" type="button" [disabled]="isUpdating(app.applicationId)" (click)="rejectApplication(app.applicationId)">Reject</button>
+          <button class="action-btn accept" type="button" [disabled]="isUpdating(app.applicationId) || isNegotiationBusy(app.applicationId)" (click)="acceptApplication(app.applicationId)">Accept</button>
+          <button class="action-btn reject" type="button" [disabled]="isUpdating(app.applicationId) || isNegotiationBusy(app.applicationId)" (click)="rejectApplication(app.applicationId)">Reject</button>
           @if (isUpdating(app.applicationId)) {
             <span class="action-progress" role="status">Updating…</span>
           }

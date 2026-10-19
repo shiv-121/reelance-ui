@@ -320,6 +320,88 @@
   word-wrap: break-word;
 }
 
+.negotiation-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #bfdbfe;
+  border-radius: 14px;
+  background: #f8fbff;
+}
+
+.negotiation-heading,
+.counteroffer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.negotiation-heading h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.negotiation-status {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.negotiation-status.negotiation-agreed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.negotiation-status.negotiation-declined {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.negotiation-next {
+  margin: 0.7rem 0;
+  color: #475569;
+}
+
+.counteroffer-entry label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #334155;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.counteroffer-controls input {
+  width: min(100%, 220px);
+  min-height: 42px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+}
+
+.response-actions {
+  justify-content: flex-start;
+  margin-top: 0.65rem;
+}
+
+.negotiation-error,
+.negotiation-success {
+  margin: 0.6rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.negotiation-error {
+  color: #b91c1c;
+}
+
+.negotiation-success {
+  color: #166534;
+}
+
 .card-actions {
   display: flex;
   flex-wrap: wrap;
@@ -405,6 +487,16 @@
   .card-actions {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .counteroffer-controls,
+  .response-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .counteroffer-controls input {
+    width: 100%;
   }
 }
 
